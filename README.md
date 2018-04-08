@@ -14,7 +14,7 @@ Simple but customizable view for displaying progress
 <img src="art/3_1.png" width="30%" /> <img src="art/3_2.png" width="30%" />
 
 
-##### With and without dot
+##### With or without dot
 <img src="art/4_1.png" width="30%" /> <img src="art/4_2.png" width="30%" />
 
 ## How to use
@@ -79,7 +79,23 @@ circularProgress.setProgress(5000, 10000);
 
 ---
 
-#### License
+### Download using Gradle
+
+Add it in your root build.gradle at the end of repositories:
+```groovy
+allprojects {
+		repositories {
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+Add this dependency to your dependencies block:
+```groovy
+implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:v1.0'
+```
+
+### License
 
 ```
  Copyright 2017 Anton Kozyriatskyi
