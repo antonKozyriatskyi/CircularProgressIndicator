@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="antonkozyriatskyi.circularprogressindicatorexample.MainActivity">
+
+    <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+        android:id="@+id/circular_progress"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+
+        android:layout_marginTop="8dp"
+        app:useProgressTextDelimiter="false" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Progress" />
+
+            <SeekBar
+                android:id="@+id/sb_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:max="10000"
+                android:min="0"
+                android:progress="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Text size" />
+
+            <SeekBar
+                android:id="@+id/sb_text_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:max="64"
+                android:min="8"
+                android:progress="24" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Progress stroke width" />
+
+
+            <SeekBar
+                android:id="@+id/sb_progress_width"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:max="64"
+                android:min="0"
+                android:progress="8" />
+
+
+            <CheckBox
+                android:id="@+id/cb_draw_dot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:checked="true"
+                android:text="Enable dot" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Progress dot width" />
+
+            <SeekBar
+                android:id="@+id/sb_dot_width"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:max="64"
+                android:min="0"
+                android:progress="8" />
+
+
+            <Button
+                android:id="@+id/btn_progress_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Progress color" />
+
+            <Button
+                android:id="@+id/btn_background_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Background color" />
+
+            <Button
+                android:id="@+id/btn_text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Text color" />
+
+            <Button
+                android:id="@+id/btn_dot_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dot color" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

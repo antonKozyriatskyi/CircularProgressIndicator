@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircularProgressIndicator">
+
+        <attr name="progressColor" format="color" />
+        <attr name="progressBackgroundColor" format="color" />
+        <attr name="progressStrokeWidth" format="dimension" />
+
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+
+        <attr name="useProgressTextDelimiter" format="boolean" />
+        <attr name="progressTextDelimiter" format="string" />
+
+        <attr name="drawDot" format="boolean" />
+        <attr name="dotColor" format="color" />
+        <attr name="dotWidth" format="dimension" />
+
+    </declare-styleable>
+
+</resources>
