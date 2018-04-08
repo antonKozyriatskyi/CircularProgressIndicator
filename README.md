@@ -81,7 +81,7 @@ circularProgress.setProgress(5000, 10000);
 
 ### Download using Gradle
 
-Add it in your root build.gradle at the end of repositories:
+Add this in your root build.gradle at the end of repositories:
 ```groovy
 allprojects {
     repositories {
