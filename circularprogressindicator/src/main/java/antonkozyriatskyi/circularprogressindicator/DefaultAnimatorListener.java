@@ -6,7 +6,7 @@ import android.animation.Animator;
  * Created by Anton on 17.03.2018.
  */
 
-public class DefaultAnimatorListener implements Animator.AnimatorListener {
+class DefaultAnimatorListener implements Animator.AnimatorListener {
     @Override
     public void onAnimationStart(Animator animation, boolean isReverse) {
 
