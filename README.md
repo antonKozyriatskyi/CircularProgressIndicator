@@ -92,7 +92,7 @@ allprojects {
 
 Add this dependency to your dependencies block:
 ```groovy
-implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:v1.0.2'
+implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.0.3'
 ```
 
 ### License
