@@ -61,6 +61,10 @@ circularProgress.setMaxProgress(10000);
 circularProgress.setCurrentProgress(5000);
 // or all at once
 circularProgress.setProgress(5000, 10000);
+
+// you can get progress values using following getters
+circularProgress.getProgress() // returns 5000
+circularProgress.getMaxProgress() // returns 10000
 ```
 
 #### Attributes
