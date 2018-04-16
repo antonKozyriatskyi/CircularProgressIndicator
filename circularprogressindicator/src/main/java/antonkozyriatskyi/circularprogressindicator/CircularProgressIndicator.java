@@ -531,4 +531,12 @@ public class CircularProgressIndicator extends View {
     public float getDotWidth() {
         return dotPaint.getStrokeWidth();
     }
+
+    public int getProgress() {
+        return progressValue;
+    }
+
+    public int getMaxProgress() {
+        return maxProgressValue;
+    }
 }
