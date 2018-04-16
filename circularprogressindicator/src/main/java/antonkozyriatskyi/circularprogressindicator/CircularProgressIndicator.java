@@ -56,7 +56,6 @@ public class CircularProgressIndicator extends View {
 
     private int sweepAngle = 0;
 
-    private RectF drawingBounds;
     private RectF circleBounds;
 
     private String progressText = "0";
@@ -162,7 +161,6 @@ public class CircularProgressIndicator extends View {
         textPaint.setAntiAlias(true);
         textPaint.setTextSize(textSize);
 
-        drawingBounds = new RectF();
         circleBounds = new RectF();
     }
 
@@ -215,11 +213,6 @@ public class CircularProgressIndicator extends View {
                 finalHeight = desiredSize;
                 break;
         }
-
-        drawingBounds.left = paddingLeft;
-        drawingBounds.top = paddingTop;
-        drawingBounds.right = finalWidth - paddingRight;
-        drawingBounds.bottom = finalHeight - paddingBottom;
 
         int widthWithoutPadding = finalWidth - paddingLeft - paddingRight;
         int heightWithoutPadding = finalHeight - paddingTop - paddingBottom;
