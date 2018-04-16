@@ -577,6 +577,7 @@ public class CircularProgressIndicator extends View {
         return maxProgressValue;
     }
 
+
     @Nullable
     public String getProgressTextPrefix() {
         return progressTextPrefix;
