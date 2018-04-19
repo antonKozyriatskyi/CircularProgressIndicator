@@ -42,7 +42,9 @@ Add view to your layout:
     app:textSize="24sp"
     app:textColor="@color/colorPrimaryDark"
     app:useProgressTextDelimiter="true"
-    app:progressTextDelimiter="."/>
+    app:progressTextDelimiter="."
+    app:progressTextPrefix="$"
+    app:progressTextSuffix="%" />
 ```
 
 Since all attributes have default values, you can specify none of them. Thus following code also works:
@@ -109,7 +111,7 @@ implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.0.4'
 ### License
 
 ```
- Copyright 2017 Anton Kozyriatskyi
+ Copyright 2018 Anton Kozyriatskyi
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
