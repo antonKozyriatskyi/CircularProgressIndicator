@@ -6,16 +6,21 @@ Simple but customizable view for displaying progress
 
 
 ##### With custom delimiters or without delimiter
-<img src="art/2_1.png" width="30%" /> <img src="art/2_2.png" width="30%" /> <br/>
-<img src="art/2_3.png" width="30%" /> <img src="art/2_4.png" width="30%" />
+<img src="art/delimiter_comma.png" width="30%" /> <img src="art/delimiter_dot.png" width="30%" /> <br/>
+<img src="art/delimiter_colon.png" width="30%" /> <img src="art/delimiter_no.png" width="30%" />
 
 
 ##### With custom colors
-<img src="art/3_1.png" width="30%" /> <img src="art/3_2.png" width="30%" />
+<img src="art/colors_1.png" width="30%" /> <img src="art/colors_2.png" width="30%" />
 
 
 ##### With or without dot
-<img src="art/4_1.png" width="30%" /> <img src="art/4_2.png" width="30%" />
+<img src="art/dot_yes.png" width="30%" /> <img src="art/dot_no.png" width="30%" />
+
+
+##### With custom progress text prefix/suffix or both
+<img src="art/prefix_yes.png" width="30%" /> <img src="art/suffix_yes.png" width="30%" /> <img src="art/prefix_suffix.png" width="30%" />
+
 
 ## How to use
 
@@ -80,6 +85,8 @@ circularProgress.getMaxProgress() // returns 10000
 |  Progress text color                                | `app:textColor`                   | setter: `setTextColor(textColor)`<br>getter: `getTextColor()`                                                                                           | same as progress color        |
 |  Whether to use delimiter or not. `true` or `false` | `app:useProgressTextDelimiter`    | setter: `setShouldUseDelimiter(shouldUseDelimiter)`<br>getter: `isTextDelimiterEnabled()`                                                               | `true`                        |
 |  The delimiter to use in progress text              | `app:progressTextDelimiter`       | setter: `setProgressTextDelimiter(delimiter)`<br>getter: `getProgressTextDelimiter()`                                                                   | `,`                           |
+|  Prefix for progress text                           | `app:progressTextPrefix`          | setter: `setProgressTextPrefix(prefix)`<br>getter: `getProgressTextPrefix()`                                                                            | `null` (disabled)             |
+|  Suffix for progress text                           | `app:progressTextSuffix`          | setter: `setProgressTextSuffix(suffix)`<br>getter: `getProgressTextSuffix()`                                                                            | `null` (disabled)             |
 
 ---
 
