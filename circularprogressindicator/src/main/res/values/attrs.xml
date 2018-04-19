@@ -11,6 +11,8 @@
 
         <attr name="useProgressTextDelimiter" format="boolean" />
         <attr name="progressTextDelimiter" format="string" />
+        <attr name="progressTextPrefix" format="string" />
+        <attr name="progressTextSuffix" format="string" />
 
         <attr name="drawDot" format="boolean" />
         <attr name="dotColor" format="color" />
