@@ -58,8 +58,10 @@ public class CircularProgressIndicator extends View {
 
     private RectF circleBounds;
 
-    private String progressText = "0";
+    private String progressText;
     private String progressTextDelimiter;
+    private String progressTextPrefix;
+    private String progressTextSuffix;
     private float textX;
     private float textY;
 
@@ -126,11 +128,15 @@ public class CircularProgressIndicator extends View {
             dotWidth = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_dotWidth, progressStrokeWidth);
 
             shouldUseDelimiter = a.getBoolean(R.styleable.CircularProgressIndicator_useProgressTextDelimiter, shouldUseDelimiter);
-            progressTextDelimiter = a.getNonResourceString(R.styleable.CircularProgressIndicator_progressTextDelimiter);
+            progressTextDelimiter = a.getString(R.styleable.CircularProgressIndicator_progressTextDelimiter);
+            progressTextPrefix = a.getString(R.styleable.CircularProgressIndicator_progressTextPrefix);
+            progressTextSuffix = a.getString(R.styleable.CircularProgressIndicator_progressTextSuffix);
 
             if (progressTextDelimiter == null) {
                 progressTextDelimiter = DEFAULT_PROGRESS_TEXT_DELIMITER;
             }
+
+            progressText = formatProgressText(progressValue);
 
             a.recycle();
         }
@@ -293,13 +299,12 @@ public class CircularProgressIndicator extends View {
         setProgress(progress, maxProgressValue);
     }
 
-    public void setProgress(final int current, int max) {
+    public void setProgress(int current, int max) {
         final float finalAngle = (float) current / max * 360;
 
-        final PropertyValuesHolder progressText = PropertyValuesHolder.ofInt(PROPERTY_PROGRESS_TEXT, progressValue, current);
-        final PropertyValuesHolder angle = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, -sweepAngle, (int) finalAngle);
+        final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, -sweepAngle, (int) finalAngle);
 
-        this.progressText = formatProgressText(current);
+        progressText = formatProgressText(current);
         maxProgressValue = max;
         progressValue = current;
 
@@ -311,7 +316,7 @@ public class CircularProgressIndicator extends View {
 
         progressAnimator = ValueAnimator.ofInt(progressValue, current);
         progressAnimator.setDuration(DEFAULT_ANIMATION_DURATION);
-        progressAnimator.setValues(progressText, angle);
+        progressAnimator.setValues(angleProperty);
         progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -331,36 +336,48 @@ public class CircularProgressIndicator extends View {
         progressAnimator.start();
     }
 
-    // 10000000 => 10,000,000
+    // Adds delimiter, prefix and suffix if needed
     private String formatProgressText(int currentProgress) {
-        if (!shouldUseDelimiter) return String.valueOf(currentProgress);
 
-        char[] chars = String.valueOf(Math.abs(currentProgress)).toCharArray();
+        StringBuilder sb = new StringBuilder(String.valueOf(currentProgress));
 
-        char[] charsReversed = new char[chars.length];
+        // apply delimiter
+        if (shouldUseDelimiter && progressTextDelimiter != null) {
+            char[] chars = String.valueOf(Math.abs(currentProgress)).toCharArray();
 
-        for (int i = 0; i < chars.length; i++) {
-            charsReversed[i] = chars[chars.length - 1 - i];
-        }
+            char[] charsReversed = new char[chars.length];
 
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(charsReversed[0]);
-        for (int i = 1; i < charsReversed.length; i++) {
-            if (i % 3 == 0) {
-                sb.append(progressTextDelimiter);
+            for (int i = 0; i < chars.length; i++) {
+                charsReversed[i] = chars[chars.length - 1 - i];
             }
 
-            sb.append(charsReversed[i]);
+            sb.append(charsReversed[0]);
+            for (int i = 1; i < charsReversed.length; i++) {
+                if (i % 3 == 0) {
+                    sb.append(progressTextDelimiter);
+                }
+
+                sb.append(charsReversed[i]);
+            }
+
+            if (currentProgress < 0) {
+                sb.append("-"); // add minus if value was negative
+            }
+
+            sb.reverse();
         }
 
-        if (currentProgress < 0) {
-            sb.append("-"); // add minus if value was negative
+        // apply prefix
+        if (progressTextPrefix != null) {
+            sb.insert(0, progressTextPrefix);
         }
 
-        String progress = sb.reverse().toString();
+        // apply suffix
+        if (progressTextSuffix != null) {
+            sb.append(progressTextSuffix);
+        }
 
-        return progress;
+        return sb.toString();
     }
 
     private Rect calculateTextBounds() {
@@ -481,8 +498,27 @@ public class CircularProgressIndicator extends View {
 
         progressText = formatProgressText(progressValue);
 
-        Rect textBounds = calculateTextBounds();
-        invalidate(textBounds);
+        requestLayout();
+        invalidate();
+    }
+
+
+    public void setProgressTextPrefix(String prefix) {
+        progressTextPrefix = prefix;
+
+        progressText = formatProgressText(progressValue);
+
+        requestLayout();
+        invalidate();
+    }
+
+    public void setProgressTextSuffix(String suffix) {
+        progressTextSuffix = suffix;
+
+        progressText = formatProgressText(progressValue);
+
+        requestLayout();
+        invalidate();
     }
 
     @ColorInt
@@ -532,11 +568,22 @@ public class CircularProgressIndicator extends View {
         return dotPaint.getStrokeWidth();
     }
 
+
     public int getProgress() {
         return progressValue;
     }
 
     public int getMaxProgress() {
         return maxProgressValue;
+    }
+
+    @Nullable
+    public String getProgressTextPrefix() {
+        return progressTextPrefix;
+    }
+
+    @Nullable
+    public String getProgressTextSuffix() {
+        return progressTextSuffix;
     }
 }
