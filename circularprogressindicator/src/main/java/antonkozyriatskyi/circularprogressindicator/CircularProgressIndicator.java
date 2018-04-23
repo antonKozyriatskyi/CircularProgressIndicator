@@ -339,7 +339,7 @@ public class CircularProgressIndicator extends View {
     // Adds delimiter, prefix and suffix if needed
     private String formatProgressText(int currentProgress) {
 
-        StringBuilder sb = new StringBuilder(String.valueOf(currentProgress));
+        StringBuilder sb = new StringBuilder(String.valueOf(currentProgress).length());
 
         // apply delimiter
         if (shouldUseDelimiter && progressTextDelimiter != null) {
@@ -365,6 +365,8 @@ public class CircularProgressIndicator extends View {
             }
 
             sb.reverse();
+        } else {
+            sb.append(String.valueOf(currentProgress));
         }
 
         // apply prefix
