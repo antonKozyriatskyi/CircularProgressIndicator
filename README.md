@@ -94,7 +94,7 @@ circularProgress.getMaxProgress() // returns 10000
 
 ### Download using Gradle
 
-Add this in your root build.gradle at the end of repositories:
+Add this in your root `build.gradle` at the end of `repositories` in `allprojects` section:
 ```groovy
 allprojects {
     repositories {
@@ -103,10 +103,12 @@ allprojects {
 }
 ```
 
-Add this dependency to your dependencies block:
+Then add this dependency to your **module-level** `build.gradle` in `dependencies` section:
 ```groovy
 implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.0.5'
 ```
+
+If you have any troubles downloading the library - checkout [issue#5](https://github.com/antonKozyriatskyi/CircularProgressIndicator/issues/5)
 
 ### License
 
