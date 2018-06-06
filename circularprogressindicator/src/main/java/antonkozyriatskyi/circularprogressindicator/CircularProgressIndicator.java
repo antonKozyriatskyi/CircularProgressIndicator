@@ -187,14 +187,15 @@ public class CircularProgressIndicator extends View {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        Rect textRect = new Rect();
-        textPaint.getTextBounds(progressText, 0, progressText.length(), textRect);
+        Rect textBoundsRect = new Rect();
+        textPaint.getTextBounds(progressText, 0, progressText.length(), textBoundsRect);
 
-        float strokeOffset = (shouldDrawDot) ? Math.max(dotPaint.getStrokeWidth(), progressPaint.getStrokeWidth()) : progressPaint.getStrokeWidth(); // to prevent progress or dot from drawing over the bounds
-        int desiredSize = ((int) strokeOffset) + dp2px(DESIRED_WIDTH_DP) +
+        float strokeSizeOffset = (shouldDrawDot) ? Math.max(dotPaint.getStrokeWidth(), progressPaint.getStrokeWidth()) : progressPaint.getStrokeWidth(); // to prevent progress or dot from drawing over the bounds
+        int desiredSize = ((int) strokeSizeOffset) + dp2px(DESIRED_WIDTH_DP) +
                 Math.max(paddingBottom + paddingTop, paddingLeft + paddingRight);
 
-        desiredSize += Math.max(textRect.width(), textRect.height()) + desiredSize * .1f;
+        // multiply by .1f to have an extra space for small padding between text and circle
+        desiredSize += Math.max(textBoundsRect.width(), textBoundsRect.height()) + desiredSize * .1f;
 
         int finalWidth;
         switch (widthMode) {
@@ -227,12 +228,13 @@ public class CircularProgressIndicator extends View {
 
         int circleDiameter = Math.min(heightWithoutPadding, widthWithoutPadding);
 
-        radius = circleDiameter / 2;
+        radius = circleDiameter / 2f;
 
         drawingCenterX = paddingLeft + widthWithoutPadding / 2f;
         drawingCenterY = paddingTop + heightWithoutPadding / 2f;
 
-        float halfOffset = strokeOffset / 2f;
+        float halfOffset = strokeSizeOffset / 2f;
+
         circleBounds.left = drawingCenterX - radius + halfOffset;
         circleBounds.top = drawingCenterY - radius + halfOffset;
         circleBounds.right = drawingCenterX + radius - halfOffset;
@@ -529,6 +531,11 @@ public class CircularProgressIndicator extends View {
     }
 
     public void setProgressTextAdapter(@Nullable ProgressTextAdapter progressTextAdapter) {
+
+        if (progressTextAdapter == null) {
+
+        }
+
         this.progressTextAdapter = progressTextAdapter;
 
         progressText = formatProgressText(progressValue);
