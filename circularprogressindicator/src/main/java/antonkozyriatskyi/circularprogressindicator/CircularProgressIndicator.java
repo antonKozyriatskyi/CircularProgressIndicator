@@ -46,7 +46,6 @@ public class CircularProgressIndicator extends View {
     private static String DEFAULT_PROGRESS_TEXT_DELIMITER = ",";
 
     private static String PROPERTY_ANGLE = "angle";
-    private static String PROPERTY_PROGRESS_TEXT = "progress_text";
 
 
     private Paint progressPaint;
@@ -78,6 +77,7 @@ public class CircularProgressIndicator extends View {
 
     private ValueAnimator progressAnimator;
 
+    @NonNull
     private ProgressTextAdapter progressTextAdapter;
 
     public CircularProgressIndicator(Context context) {
@@ -138,7 +138,17 @@ public class CircularProgressIndicator extends View {
                 progressTextDelimiter = DEFAULT_PROGRESS_TEXT_DELIMITER;
             }
 
-            progressText = formatProgressText(progressValue);
+            String formattingPattern = a.getString(R.styleable.CircularProgressIndicator_formattingPattern);
+            if (formattingPattern != null) {
+                if (formattingPattern.length() > 0 && formattingPattern.charAt(0) != '%') {
+                    formattingPattern = '%' + formattingPattern;
+                }
+                progressTextAdapter = new PatternProgressTextAdapter(formattingPattern);
+            } else {
+                progressTextAdapter = new DefaultProgressTextAdapter();
+            }
+
+            reformatProgressText();
 
             a.recycle();
         }
@@ -308,7 +318,7 @@ public class CircularProgressIndicator extends View {
 
         final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, -sweepAngle, (int) finalAngle);
 
-        progressText = formatProgressText(current);
+        reformatProgressText();
         maxProgressValue = max;
         progressValue = current;
 
@@ -340,53 +350,8 @@ public class CircularProgressIndicator extends View {
         progressAnimator.start();
     }
 
-    // Adds delimiter, prefix and suffix if needed
-    private String formatProgressText(int currentProgress) {
-        if (progressTextAdapter != null) {
-            return progressTextAdapter.formatText(currentProgress);
-        }
-
-        StringBuilder sb = new StringBuilder(String.valueOf(currentProgress).length());
-
-        // apply delimiter
-        if (shouldUseDelimiter && progressTextDelimiter != null) {
-            char[] chars = String.valueOf(Math.abs(currentProgress)).toCharArray();
-
-            char[] charsReversed = new char[chars.length];
-
-            for (int i = 0; i < chars.length; i++) {
-                charsReversed[i] = chars[chars.length - 1 - i];
-            }
-
-            sb.append(charsReversed[0]);
-            for (int i = 1; i < charsReversed.length; i++) {
-                if (i % 3 == 0) {
-                    sb.append(progressTextDelimiter);
-                }
-
-                sb.append(charsReversed[i]);
-            }
-
-            if (currentProgress < 0) {
-                sb.append("-"); // add minus if value was negative
-            }
-
-            sb.reverse();
-        } else {
-            sb.append(String.valueOf(currentProgress));
-        }
-
-        // apply prefix
-        if (progressTextPrefix != null) {
-            sb.insert(0, progressTextPrefix);
-        }
-
-        // apply suffix
-        if (progressTextSuffix != null) {
-            sb.append(progressTextSuffix);
-        }
-
-        return sb.toString();
+    private void reformatProgressText() {
+        progressText = progressTextAdapter.formatText(progressValue);
     }
 
     private Rect calculateTextBounds() {
@@ -505,7 +470,7 @@ public class CircularProgressIndicator extends View {
     public void setProgressTextDelimiter(@Nullable String delimiter) {
         progressTextDelimiter = delimiter;
 
-        progressText = formatProgressText(progressValue);
+        reformatProgressText();
 
         requestLayout();
         invalidate();
@@ -515,7 +480,7 @@ public class CircularProgressIndicator extends View {
     public void setProgressTextPrefix(String prefix) {
         progressTextPrefix = prefix;
 
-        progressText = formatProgressText(progressValue);
+        reformatProgressText();
 
         requestLayout();
         invalidate();
@@ -524,7 +489,7 @@ public class CircularProgressIndicator extends View {
     public void setProgressTextSuffix(String suffix) {
         progressTextSuffix = suffix;
 
-        progressText = formatProgressText(progressValue);
+        reformatProgressText();
 
         requestLayout();
         invalidate();
@@ -532,13 +497,13 @@ public class CircularProgressIndicator extends View {
 
     public void setProgressTextAdapter(@Nullable ProgressTextAdapter progressTextAdapter) {
 
-        if (progressTextAdapter == null) {
-
+        if (progressTextAdapter != null) {
+            this.progressTextAdapter = progressTextAdapter;
+        } else {
+            this.progressTextAdapter = new DefaultProgressTextAdapter();
         }
 
-        this.progressTextAdapter = progressTextAdapter;
-
-        progressText = formatProgressText(progressValue);
+        reformatProgressText();
 
         requestLayout();
         invalidate();
@@ -600,6 +565,7 @@ public class CircularProgressIndicator extends View {
         return maxProgressValue;
     }
 
+
     @Nullable
     public String getProgressTextPrefix() {
         return progressTextPrefix;
@@ -611,6 +577,7 @@ public class CircularProgressIndicator extends View {
     }
 
     public interface ProgressTextAdapter {
+
         String formatText(int currentProgress);
     }
 }
