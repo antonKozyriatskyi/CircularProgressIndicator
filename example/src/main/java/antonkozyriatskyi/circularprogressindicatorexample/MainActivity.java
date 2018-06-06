@@ -57,7 +57,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dotColor.setEnabled(isChecked);
             }
         });
-
+        CheckBox useCustomTextAdapter = findViewById(R.id.cb_custom_text_adapter);
+        useCustomTextAdapter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                circularProgress.setProgressTextAdapter(isChecked ? TIME_TEXT_ADAPTER : null);
+            }
+        });
     }
 
     @Override
@@ -133,4 +139,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    private static final CircularProgressIndicator.ProgressTextAdapter TIME_TEXT_ADAPTER = new CircularProgressIndicator.ProgressTextAdapter() {
+        @Override
+        public String formatText(int time) {
+            int hours = time / 3600;
+            time %= 3600;
+            int minutes = time / 60;
+            int seconds = time % 60;
+            StringBuilder sb = new StringBuilder();
+            if (hours < 10) {
+                sb.append(0);
+            }
+            sb.append(hours).append(":");
+            if (minutes < 10) {
+                sb.append(0);
+            }
+            sb.append(minutes).append(":");
+            if (seconds < 10) {
+                sb.append(0);
+            }
+            sb.append(seconds);
+            return sb.toString();
+        }
+    };
 }
