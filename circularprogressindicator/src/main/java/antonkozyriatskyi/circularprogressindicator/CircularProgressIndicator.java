@@ -2,6 +2,7 @@ package antonkozyriatskyi.circularprogressindicator;
 
 import android.animation.Animator;
 import android.animation.PropertyValuesHolder;
+import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -72,8 +73,8 @@ public class CircularProgressIndicator extends View {
     private boolean shouldDrawDot = true;
     private boolean shouldUseDelimiter = true;
 
-    private int maxProgressValue = 100;
-    private int progressValue = 0;
+    private double maxProgressValue = 100.0;
+    private double progressValue = 0.0;
 
     private ValueAnimator progressAnimator;
 
@@ -297,7 +298,7 @@ public class CircularProgressIndicator extends View {
         canvas.drawText(progressText, textX, textY, textPaint);
     }
 
-    public void setMaxProgress(int maxProgress) {
+    public void setMaxProgress(double maxProgress) {
         maxProgressValue = maxProgress;
         if (maxProgressValue < progressValue) {
             setCurrentProgress(maxProgress);
@@ -305,7 +306,7 @@ public class CircularProgressIndicator extends View {
         invalidate();
     }
 
-    public void setCurrentProgress(int progress) {
+    public void setCurrentProgress(double progress) {
         if (progress > maxProgressValue) {
             maxProgressValue = progress;
         }
@@ -313,14 +314,17 @@ public class CircularProgressIndicator extends View {
         setProgress(progress, maxProgressValue);
     }
 
-    public void setProgress(int current, int max) {
-        final float finalAngle = (float) current / max * 360;
+    public void setProgress(double current, double max) {
+        final double finalAngle = current / max * 360;
 
         final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, -sweepAngle, (int) finalAngle);
 
-        reformatProgressText();
+        double oldCurrentProgress = progressValue;
+
         maxProgressValue = max;
-        progressValue = current;
+        progressValue = Math.min(current, max);
+
+        reformatProgressText();
 
         calculateTextBounds();
 
@@ -328,7 +332,12 @@ public class CircularProgressIndicator extends View {
             progressAnimator.cancel();
         }
 
-        progressAnimator = ValueAnimator.ofInt(progressValue, current);
+        progressAnimator = ValueAnimator.ofObject(new TypeEvaluator<Double>() { // problem here
+            @Override
+            public Double evaluate(float fraction, Double startValue, Double endValue) {
+                return (startValue + (endValue - startValue) * fraction);
+            }
+        }, oldCurrentProgress, progressValue);
         progressAnimator.setDuration(DEFAULT_ANIMATION_DURATION);
         progressAnimator.setValues(angleProperty);
         progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -557,11 +566,11 @@ public class CircularProgressIndicator extends View {
     }
 
 
-    public int getProgress() {
+    public double getProgress() {
         return progressValue;
     }
 
-    public int getMaxProgress() {
+    public double getMaxProgress() {
         return maxProgressValue;
     }
 
@@ -578,6 +587,6 @@ public class CircularProgressIndicator extends View {
 
     public interface ProgressTextAdapter {
 
-        String formatText(int currentProgress);
+        String formatText(double currentProgress);
     }
 }

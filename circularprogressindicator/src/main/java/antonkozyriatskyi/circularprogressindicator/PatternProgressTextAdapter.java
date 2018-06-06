@@ -13,7 +13,7 @@ public final class PatternProgressTextAdapter implements CircularProgressIndicat
     }
 
     @Override
-    public String formatText(int currentProgress) {
-        return String.format(pattern, (double) currentProgress);
+    public String formatText(double currentProgress) {
+        return String.format(pattern, currentProgress);
     }
 }

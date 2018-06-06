@@ -142,11 +142,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final CircularProgressIndicator.ProgressTextAdapter TIME_TEXT_ADAPTER = new CircularProgressIndicator.ProgressTextAdapter() {
         @Override
-        public String formatText(int time) {
-            int hours = time / 3600;
+        public String formatText(double time) {
+            int hours = (int) (time / 3600);
             time %= 3600;
-            int minutes = time / 60;
-            int seconds = time % 60;
+            int minutes = (int) (time / 60);
+            int seconds = (int) (time % 60);
             StringBuilder sb = new StringBuilder();
             if (hours < 10) {
                 sb.append(0);

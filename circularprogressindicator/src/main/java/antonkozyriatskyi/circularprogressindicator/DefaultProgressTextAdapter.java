@@ -7,7 +7,7 @@ package antonkozyriatskyi.circularprogressindicator;
 public final class DefaultProgressTextAdapter implements CircularProgressIndicator.ProgressTextAdapter {
 
     @Override
-    public String formatText(int currentProgress) {
+    public String formatText(double currentProgress) {
         return String.valueOf(currentProgress);
     }
 }
