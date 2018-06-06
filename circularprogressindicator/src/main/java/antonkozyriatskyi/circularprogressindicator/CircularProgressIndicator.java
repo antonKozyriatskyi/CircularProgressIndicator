@@ -78,6 +78,8 @@ public class CircularProgressIndicator extends View {
 
     private ValueAnimator progressAnimator;
 
+    private ProgressTextAdapter progressTextAdapter;
+
     public CircularProgressIndicator(Context context) {
         super(context);
         init(context, null);
@@ -338,6 +340,9 @@ public class CircularProgressIndicator extends View {
 
     // Adds delimiter, prefix and suffix if needed
     private String formatProgressText(int currentProgress) {
+        if (progressTextAdapter != null) {
+            return progressTextAdapter.formatText(currentProgress);
+        }
 
         StringBuilder sb = new StringBuilder(String.valueOf(currentProgress).length());
 
@@ -523,6 +528,15 @@ public class CircularProgressIndicator extends View {
         invalidate();
     }
 
+    public void setProgressTextAdapter(@Nullable ProgressTextAdapter progressTextAdapter) {
+        this.progressTextAdapter = progressTextAdapter;
+
+        progressText = formatProgressText(progressValue);
+
+        requestLayout();
+        invalidate();
+    }
+
     @ColorInt
     public int getProgressColor() {
         return progressPaint.getColor();
@@ -587,5 +601,9 @@ public class CircularProgressIndicator extends View {
     @Nullable
     public String getProgressTextSuffix() {
         return progressTextSuffix;
+    }
+
+    public interface ProgressTextAdapter {
+        String formatText(int currentProgress);
     }
 }
