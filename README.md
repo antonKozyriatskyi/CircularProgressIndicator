@@ -107,7 +107,7 @@ It's implementation looks like this:
 
 
 `PatternProgressTextAdapter` supports formatting progress using Java's [formatting patterns](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html).
-For example, if you want to display progress with two digits for the fractional part, you can use `%.2f` `&#37;.2f` pattern and set it via
+For example, if you want to display progress with two digits for the fractional part, you can use `%.2f` pattern and set it via
 
 - attribute:   
    `app:formattingPattern="@string/pattern"` that refers to a string resource<br/>`<string name="pattern">%.2f</string>`<br/>
