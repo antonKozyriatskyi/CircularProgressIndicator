@@ -141,9 +141,6 @@ public class CircularProgressIndicator extends View {
 
             String formattingPattern = a.getString(R.styleable.CircularProgressIndicator_formattingPattern);
             if (formattingPattern != null) {
-                if (formattingPattern.length() > 0 && formattingPattern.charAt(0) != '%') {
-                    formattingPattern = '%' + formattingPattern;
-                }
                 progressTextAdapter = new PatternProgressTextAdapter(formattingPattern);
             } else {
                 progressTextAdapter = new DefaultProgressTextAdapter();
