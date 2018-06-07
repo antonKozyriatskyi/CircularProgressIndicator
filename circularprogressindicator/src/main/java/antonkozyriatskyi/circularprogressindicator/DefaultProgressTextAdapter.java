@@ -8,6 +8,6 @@ public final class DefaultProgressTextAdapter implements CircularProgressIndicat
 
     @Override
     public String formatText(double currentProgress) {
-        return String.valueOf(currentProgress);
+        return String.valueOf((int) currentProgress);
     }
 }
