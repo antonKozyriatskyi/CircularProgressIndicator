@@ -16,6 +16,7 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
 import android.support.annotation.IntDef;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
@@ -537,7 +538,7 @@ public class CircularProgressIndicator extends View {
         return startAngle;
     }
 
-    public void setStartAngle(int startAngle) {
+    public void setStartAngle(@IntRange(from = 0, to = 360) int startAngle) {
         this.startAngle = startAngle;
         invalidate();
     }
