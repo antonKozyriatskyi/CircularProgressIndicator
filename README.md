@@ -17,6 +17,13 @@ Simple but customizable view for displaying progress
 <img src="art/prefix_yes.png" width="30%" /> <img src="art/suffix_yes.png" width="30%" /> <img src="art/prefix_suffix.png" width="30%" />
 
 
+##### With clockwise direction
+<img src="art/direction-clockwise.png" width="30%" />
+
+##### With custom start angle (details [here](#setting-start-angle))
+<img src="art/angle-45.png" width="30%" /> <img src="art/angle-333.png" width="30%" />
+
+
 ## How to use
 
 Add view to your layout:
@@ -66,30 +73,28 @@ circularProgress.getMaxProgress() // returns 10000
 ```
 
 #### Attributes
-|  Description                                                                                                                                        | XML                               | Java                                                                                                                                                    | Default value                 |
-|  -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-|  Progress color                                                                                                                                     | `app:progressColor`               | setter: `setProgressColor(color)`<br>getter: `getProgressColor()`                                                                                       | `#3f51b5`                     |
-|  Progress background  color                                                                                                                         | `app:progressBackgroundColor`     | setter: `setProgressBackgroundColor(color)`<br>getter: `getProgressBackgroundColor()`                                                                   | `#e0e0e0`                     |
-|  Width of progress stroke                                                                                                                           | `app:progressStrokeWidth`         | setters: `setProgressStrokeWidthDp(widthInDp)` or `setProgressStrokeWidthPx(widthInPx)`<br>getter: `getProgressStrokeWidth()` (returns width in pixels) | `8dp`                         |
-|  Whether to draw dot. `true` or `false`                                                                                                             | `app:drawDot`                     | setter: `setShouldDrawDot(shoulDrawDot)`<br>getter: `isDotEnabled()`                                                                                    | `true`                        |
-|  Dot color                                                                                                                                          | `app:dotColor`                    | setter: `setDotColor(dotColor)`<br>getter: `getDotColor()`                                                                                              | same as progress color        |
-|  Dot width                                                                                                                                          | `app:dotWidth`                    | setters: `setDotWidthDp(widthInDp)` or `setDotWidthPx(widthInPx)`<br>getter: `getDotWidth()` (returns width in pixels)                                  | same as progress stroke width |
-|  Progress text size                                                                                                                                 | `app:textSize`                    | setters: `setTextSizeSp(sizeInSp)` or `setTextSizePx(sizeInPx)`<br>getter: `getTextSize()` (returns size in pixels)                                     | `24sp`                        |
-|  Progress text color                                                                                                                                | `app:textColor`                   | setter: `setTextColor(textColor)`<br>getter: `getTextColor()`                                                                                           | same as progress color        |
-|  ~~Whether to use delimiter or not. `true` or `false`~~.<br/> Deprecated and will be removed in next release.<br/> Use ProgressTextAdapter instead. | `app:useProgressTextDelimiter`    | setter: `setShouldUseDelimiter(shouldUseDelimiter)`<br>getter: `isTextDelimiterEnabled()`                                                               | `true`                        |
-|  ~~The delimiter to use in progress text~~.<br/> Deprecated and will be removed in next release.<br/> Use ProgressTextAdapter instead.              | `app:progressTextDelimiter`       | setter: `setProgressTextDelimiter(delimiter)`<br>getter: `getProgressTextDelimiter()`                                                                   | `,`                           |
-|  ~~Prefix for progress text~~.<br/> Deprecated and will be removed in next release.<br/> Use ProgressTextAdapter instead.                           | `app:progressTextPrefix`          | setter: `setProgressTextPrefix(prefix)`<br>getter: `getProgressTextPrefix()`                                                                            | `null` (disabled)             |
-|  ~~Suffix for progress text~~.<br/> Deprecated and will be removed in next release.<br/> Use ProgressTextAdapter instead.                           | `app:progressTextSuffix`          | setter: `setProgressTextSuffix(suffix)`<br>getter: `getProgressTextSuffix()`                                                                            | `null` (disabled)             |
-|  Formatting pattern to be used in `PatternProgressTextAdapter`. Checkout [Formatting progress text](#formatting-progress-text) section.             | `app:formattingPattern`           |                                                                                                                                                         | not specified                 |
+|  Description                                                                                                                                        | XML                               | Java                                                                                                                                                     | Default value                 |
+|  -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+|  Progress color                                                                                                                                     | `app:progressColor`               | setter: `setProgressColor(color)`<br/>getter: `getProgressColor()`                                                                                       | `#3f51b5`                     |
+|  Progress background  color                                                                                                                         | `app:progressBackgroundColor`     | setter: `setProgressBackgroundColor(color)`<br/>getter: `getProgressBackgroundColor()`                                                                   | `#e0e0e0`                     |
+|  Width of progress stroke                                                                                                                           | `app:progressStrokeWidth`         | setters: `setProgressStrokeWidthDp(widthInDp)` or `setProgressStrokeWidthPx(widthInPx)`<br/>getter: `getProgressStrokeWidth()` (returns width in pixels) | `8dp`                         |
+|  Whether to draw dot. `true` or `false`                                                                                                             | `app:drawDot`                     | setter: `setShouldDrawDot(shoulDrawDot)`<br/>getter: `isDotEnabled()`                                                                                    | `true`                        |
+|  Dot color                                                                                                                                          | `app:dotColor`                    | setter: `setDotColor(dotColor)`<br/>getter: `getDotColor()`                                                                                              | same as progress color        |
+|  Dot width                                                                                                                                          | `app:dotWidth`                    | setters: `setDotWidthDp(widthInDp)` or `setDotWidthPx(widthInPx)`<br/>getter: `getDotWidth()` (returns width in pixels)                                  | same as progress stroke width |
+|  Progress text size                                                                                                                                 | `app:textSize`                    | setters: `setTextSizeSp(sizeInSp)` or `setTextSizePx(sizeInPx)`<br/>getter: `getTextSize()` (returns size in pixels)                                     | `24sp`                        |
+|  Progress text color                                                                                                                                | `app:textColor`                   | setter: `setTextColor(textColor)`<br/>getter: `getTextColor()`                                                                                           | same as progress color        |
+|  Formatting pattern to be used in `PatternProgressTextAdapter`. Checkout [Formatting progress text](#formatting-progress-text) section.             | `app:formattingPattern`           | setter: `setProgressTextAdapter(progressTextAdapter)`<br/>getter: `getProgressTextAdapter()`                                                             | not specified                 |
+|  Direction of the progress arc (`clockwise` or `counterclockwise`)                                                                                  | `app:direction`                   | setter: `setDirection(direction)`<br/>getter: `getDirection()`                                                                                           | `counterclockwise`            |
+|  Start angle. Checkout [Start angle](#setting-start-angle) section.                                                                                 | `app:startAngle`                  | setter: `setStartAngle(startAngle)`<br/>getter: `getStartAngle()`                                                                                        | `270`                         |
 
 ---
 
 #### Formatting progress text
 Before version 1.0.5 formatting text was limited to specifying prefix, suffix and delimiter. Since version 1.1 you have full control over the text to be displayed (thanks to the [repitch](https://github.com/repitch) for the idea and implementation).
-So `app:useProgressTextDelimiter`, `app:progressTextDelimiter`, `app:progressTextPrefix`, `app:progressTextSuffix` attributes are now deprecated and not taken into account.
+!!! Attributes `app:useProgressTextDelimiter`, `app:progressTextDelimiter`, `app:progressTextPrefix`, `app:progressTextSuffix` were removed in v1.1.3.
 
 The only thing you have to do is to provide an implementation of `CircularProgressIndicator.ProgressTextAdapter`.
-You must override it's `String formatText(double currentProgress);`.
+You must override it's `String formatText(double currentProgress);` method.
 Library already provides you with two implementations:
 * [DefaultProgressTextAdapter](circularprogressindicator/src/main/java/antonkozyriatskyi/circularprogressindicator/DefaultProgressTextAdapter.java) that just returns string representation of the progress value cast to `int`.
 * [PatternProgressTextAdapter](circularprogressindicator/src/main/java/antonkozyriatskyi/circularprogressindicator/PatternProgressTextAdapter.java) that uses pattern specified in `formattingPattern` attribute to format progress (if it is set, otherwise it fallbacks to the `DefaultProgressTextAdapter`).
@@ -148,6 +153,20 @@ If you don't want any text to be displayed - just create your own `ProgressTextA
 
 ---
 
+#### Setting start angle
+You can specify start angle for the progress arc using `app:startAngle` attribute or `setStartAngle(startAngle)` method.
+Acceptable values are from 0 to 360 degrees. But be aware that they go clockwise, so:
+ - 0&deg; is at 3 o'clock as usual
+ - 90&deg; is at 6 o'clock
+ - 180&deg; is at 9 o'clock
+ - 270&deg; is at 12 o'clock
+
+<img src="https://images.thoughtbot.com/blog-vellum-image-uploads/BCOj7ParTSipCtBRX2dw_full.png" width="30%" />
+
+###### Image taken from [Android Canvas' drawArc Method: A Visual Guide](https://robots.thoughtbot.com/android-canvas-drawarc-method-a-visual-guide) article.
+
+---
+
 ### Download using Gradle
 
 Add this in your root `build.gradle` at the end of `repositories` in `allprojects` section:
@@ -161,7 +180,7 @@ allprojects {
 
 Then add this dependency to your **module-level** `build.gradle` in `dependencies` section:
 ```groovy
-implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.1.0'
+implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.1.3'
 ```
 
 If you have any troubles downloading the library - checkout [issue#5](https://github.com/antonKozyriatskyi/CircularProgressIndicator/issues/5)
