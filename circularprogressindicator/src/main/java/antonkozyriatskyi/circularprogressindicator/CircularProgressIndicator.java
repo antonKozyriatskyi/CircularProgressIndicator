@@ -481,6 +481,11 @@ public class CircularProgressIndicator extends View {
         invalidateEverything();
     }
 
+    @NonNull
+    public ProgressTextAdapter getProgressTextAdapter() {
+        return progressTextAdapter;
+    }
+
     @ColorInt
     public int getProgressColor() {
         return progressPaint.getColor();
