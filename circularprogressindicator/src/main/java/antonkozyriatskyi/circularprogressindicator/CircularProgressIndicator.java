@@ -280,7 +280,7 @@ public class CircularProgressIndicator extends View {
     }
 
     private void drawDot(Canvas canvas) {
-        double angleRadians = Math.toRadians(sweepAngle + 90);
+        double angleRadians = Math.toRadians(startAngle + sweepAngle + 180);
         float cos = (float) Math.cos(angleRadians);
         float sin = (float) Math.sin(angleRadians);
         float x = circleBounds.centerX() - radius * cos;
