@@ -48,8 +48,6 @@ public class CircularProgressIndicator extends View {
 
     private static final int DEFAULT_ANIMATION_DURATION = 1_000;
 
-    private static String DEFAULT_PROGRESS_TEXT_DELIMITER = ",";
-
     private static final String PROPERTY_ANGLE = "angle";
 
 
@@ -64,19 +62,12 @@ public class CircularProgressIndicator extends View {
     private RectF circleBounds;
 
     private String progressText;
-    private String progressTextDelimiter;
-    private String progressTextPrefix;
-    private String progressTextSuffix;
     private float textX;
     private float textY;
 
     private float radius;
 
-    private float drawingCenterX;
-    private float drawingCenterY;
-
     private boolean shouldDrawDot = true;
-    private boolean shouldUseDelimiter = true;
 
     private double maxProgressValue = 100.0;
     private double progressValue = 0.0;
@@ -122,9 +113,6 @@ public class CircularProgressIndicator extends View {
         int dotColor = progressColor;
         int dotWidth = progressStrokeWidth;
 
-        shouldUseDelimiter = true;
-        progressTextDelimiter = DEFAULT_PROGRESS_TEXT_DELIMITER;
-
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressIndicator);
 
@@ -144,15 +132,6 @@ public class CircularProgressIndicator extends View {
             }
 
             direction = a.getInt(R.styleable.CircularProgressIndicator_direction, DIRECTION_COUNTERCLOCKWISE);
-
-            shouldUseDelimiter = a.getBoolean(R.styleable.CircularProgressIndicator_useProgressTextDelimiter, shouldUseDelimiter);
-            progressTextDelimiter = a.getString(R.styleable.CircularProgressIndicator_progressTextDelimiter);
-            progressTextPrefix = a.getString(R.styleable.CircularProgressIndicator_progressTextPrefix);
-            progressTextSuffix = a.getString(R.styleable.CircularProgressIndicator_progressTextSuffix);
-
-            if (progressTextDelimiter == null) {
-                progressTextDelimiter = DEFAULT_PROGRESS_TEXT_DELIMITER;
-            }
 
             String formattingPattern = a.getString(R.styleable.CircularProgressIndicator_formattingPattern);
             if (formattingPattern != null) {
@@ -261,9 +240,6 @@ public class CircularProgressIndicator extends View {
     private void calculateBounds(int w, int h) {
         radius = w / 2f;
 
-        drawingCenterX = w / 2f;
-        drawingCenterY = h / 2f;
-
         float strokeSizeOffset = (shouldDrawDot) ? Math.max(dotPaint.getStrokeWidth(), progressPaint.getStrokeWidth()) : progressPaint.getStrokeWidth(); // to prevent progress or dot from drawing over the bounds
         float halfOffset = strokeSizeOffset / 2f;
 
@@ -350,14 +326,13 @@ public class CircularProgressIndicator extends View {
         progressValue = Math.min(current, max);
 
         reformatProgressText();
-
         calculateTextBounds();
 
         if (progressAnimator != null) {
             progressAnimator.cancel();
         }
 
-        progressAnimator = ValueAnimator.ofObject(new TypeEvaluator<Double>() { // problem here
+        progressAnimator = ValueAnimator.ofObject(new TypeEvaluator<Double>() {
             @Override
             public Double evaluate(float fraction, Double startValue, Double endValue) {
                 return (startValue + (endValue - startValue) * fraction);
@@ -402,9 +377,9 @@ public class CircularProgressIndicator extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
     }
 
-    private int sp2px(float dp) {
+    private int sp2px(float sp) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, dp, metrics);
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, metrics);
     }
 
     // calculates circle bounds, view size and requests invalidation
@@ -493,43 +468,6 @@ public class CircularProgressIndicator extends View {
         invalidateEverything();
     }
 
-    public void setShouldUseDelimiter(boolean shouldUseDelimiter) {
-        this.shouldUseDelimiter = shouldUseDelimiter;
-
-        if (!shouldUseDelimiter) {
-            progressTextDelimiter = null;
-        }
-
-        calculateTextBounds();
-
-        invalidateEverything();
-    }
-
-    public void setProgressTextDelimiter(@Nullable String delimiter) {
-        progressTextDelimiter = delimiter;
-
-        reformatProgressText();
-
-        invalidateEverything();
-    }
-
-
-    public void setProgressTextPrefix(String prefix) {
-        progressTextPrefix = prefix;
-
-        reformatProgressText();
-
-        invalidateEverything();
-    }
-
-    public void setProgressTextSuffix(String suffix) {
-        progressTextSuffix = suffix;
-
-        reformatProgressText();
-
-        invalidateEverything();
-    }
-
     public void setProgressTextAdapter(@Nullable ProgressTextAdapter progressTextAdapter) {
 
         if (progressTextAdapter != null) {
@@ -568,15 +506,6 @@ public class CircularProgressIndicator extends View {
     }
 
 
-    public boolean isTextDelimiterEnabled() {
-        return this.shouldUseDelimiter;
-    }
-
-    public String getProgressTextDelimiter() {
-        return progressTextDelimiter;
-    }
-
-
     public boolean isDotEnabled() {
         return shouldDrawDot;
     }
@@ -597,17 +526,6 @@ public class CircularProgressIndicator extends View {
 
     public double getMaxProgress() {
         return maxProgressValue;
-    }
-
-
-    @Nullable
-    public String getProgressTextPrefix() {
-        return progressTextPrefix;
-    }
-
-    @Nullable
-    public String getProgressTextSuffix() {
-        return progressTextSuffix;
     }
 
 
