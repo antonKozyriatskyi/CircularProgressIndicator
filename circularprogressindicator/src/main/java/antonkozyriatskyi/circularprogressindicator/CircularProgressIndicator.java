@@ -15,6 +15,7 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
@@ -31,22 +32,25 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 @SuppressWarnings("FieldCanBeLocal")
 public class CircularProgressIndicator extends View {
 
-    private static int DEFAULT_PROGRESS_START_ANGLE = 270;
-    private static int ANGLE_START_PROGRESS_BACKGROUND = 0;
-    private static int ANGLE_END_PROGRESS_BACKGROUND = 360;
+    public static final int DIRECTION_CLOCKWISE = 0;
+    public static final int DIRECTION_COUNTERCLOCKWISE = 1;
 
-    private static int DESIRED_WIDTH_DP = 150;
+    private static final int DEFAULT_PROGRESS_START_ANGLE = 270;
+    private static final int ANGLE_START_PROGRESS_BACKGROUND = 0;
+    private static final int ANGLE_END_PROGRESS_BACKGROUND = 360;
 
-    private static String DEFAULT_PROGRESS_COLOR = "#3F51B5";
-    private static int DEFAULT_TEXT_SIZE_SP = 24;
-    private static int DEFAULT_STROKE_WIDTH_DP = 8;
-    private static String DEFAULT_PROGRESS_BACKGROUND_COLOR = "#e0e0e0";
+    private static final int DESIRED_WIDTH_DP = 150;
 
-    private static int DEFAULT_ANIMATION_DURATION = 1_000;
+    private static final String DEFAULT_PROGRESS_COLOR = "#3F51B5";
+    private static final int DEFAULT_TEXT_SIZE_SP = 24;
+    private static final int DEFAULT_STROKE_WIDTH_DP = 8;
+    private static final String DEFAULT_PROGRESS_BACKGROUND_COLOR = "#e0e0e0";
+
+    private static final int DEFAULT_ANIMATION_DURATION = 1_000;
 
     private static String DEFAULT_PROGRESS_TEXT_DELIMITER = ",";
 
-    private static String PROPERTY_ANGLE = "angle";
+    private static final String PROPERTY_ANGLE = "angle";
 
 
     private Paint progressPaint;
@@ -76,6 +80,9 @@ public class CircularProgressIndicator extends View {
 
     private double maxProgressValue = 100.0;
     private double progressValue = 0.0;
+
+    @Direction
+    private int direction = DIRECTION_COUNTERCLOCKWISE;
 
     private ValueAnimator progressAnimator;
 
@@ -135,6 +142,8 @@ public class CircularProgressIndicator extends View {
             if (startAngle < 0 || startAngle > 360) {
                 startAngle = DEFAULT_PROGRESS_START_ANGLE;
             }
+
+            direction = a.getInt(R.styleable.CircularProgressIndicator_direction, DIRECTION_COUNTERCLOCKWISE);
 
             shouldUseDelimiter = a.getBoolean(R.styleable.CircularProgressIndicator_useProgressTextDelimiter, shouldUseDelimiter);
             progressTextDelimiter = a.getString(R.styleable.CircularProgressIndicator_progressTextDelimiter);
@@ -274,7 +283,7 @@ public class CircularProgressIndicator extends View {
     protected void onDraw(Canvas canvas) {
         drawProgressBackground(canvas);
         drawProgress(canvas);
-        if (shouldDrawDot) drawPoint(canvas);
+        if (shouldDrawDot) drawDot(canvas);
         drawText(canvas);
     }
 
@@ -287,12 +296,12 @@ public class CircularProgressIndicator extends View {
         canvas.drawArc(circleBounds, startAngle, sweepAngle, false, progressPaint);
     }
 
-    private void drawPoint(Canvas canvas) {
-        double angleRadians = Math.toRadians(-(sweepAngle + startAngle + 90));
+    private void drawDot(Canvas canvas) {
+        double angleRadians = Math.toRadians(sweepAngle + 90);
         float cos = (float) Math.cos(angleRadians);
         float sin = (float) Math.sin(angleRadians);
-        float x = circleBounds.centerX() - radius * sin;
-        float y = circleBounds.centerY() - radius * cos;
+        float x = circleBounds.centerX() - radius * cos;
+        float y = circleBounds.centerY() - radius * sin;
 
         canvas.drawPoint(x, y, dotPaint);
     }
@@ -309,18 +318,24 @@ public class CircularProgressIndicator extends View {
         invalidate();
     }
 
-    public void setCurrentProgress(double progress) {
-        if (progress > maxProgressValue) {
-            maxProgressValue = progress;
+    public void setCurrentProgress(double currentProgress) {
+        if (currentProgress > maxProgressValue) {
+            maxProgressValue = currentProgress;
         }
 
-        setProgress(progress, maxProgressValue);
+        setProgress(currentProgress, maxProgressValue);
     }
 
     public void setProgress(double current, double max) {
-        final double finalAngle = current / max * 360;
+        final double finalAngle;
 
-        final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, -sweepAngle, (int) finalAngle);
+        if (direction == DIRECTION_COUNTERCLOCKWISE) {
+            finalAngle = -(current / max * 360);
+        } else {
+            finalAngle = current / max * 360;
+        }
+
+        final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, sweepAngle, (int) finalAngle);
 
         double oldCurrentProgress = progressValue;
 
@@ -347,14 +362,14 @@ public class CircularProgressIndicator extends View {
         progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                sweepAngle = -(int) animation.getAnimatedValue(PROPERTY_ANGLE);
+                sweepAngle = (int) animation.getAnimatedValue(PROPERTY_ANGLE);
                 invalidate();
             }
         });
         progressAnimator.addListener(new DefaultAnimatorListener() {
             @Override
             public void onAnimationCancel(Animator animation) {
-                sweepAngle = (int) -finalAngle;
+                sweepAngle = (int) finalAngle;
 
                 progressAnimator = null;
             }
@@ -587,6 +602,11 @@ public class CircularProgressIndicator extends View {
     public String getProgressTextSuffix() {
         return progressTextSuffix;
     }
+
+
+    @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
+    private @interface Direction { }
+
 
     public interface ProgressTextAdapter {
 
