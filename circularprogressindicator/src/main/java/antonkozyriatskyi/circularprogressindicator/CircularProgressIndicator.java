@@ -249,25 +249,32 @@ public class CircularProgressIndicator extends View {
         int widthWithoutPadding = finalWidth - paddingLeft - paddingRight;
         int heightWithoutPadding = finalHeight - paddingTop - paddingBottom;
 
-        int circleDiameter = Math.min(heightWithoutPadding, widthWithoutPadding);
+        int smallestSide = Math.min(heightWithoutPadding, widthWithoutPadding);
+        setMeasuredDimension(smallestSide, smallestSide);
+    }
 
-        radius = circleDiameter / 2f;
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        calculateBounds(w, h);
+    }
 
-        drawingCenterX = paddingLeft + widthWithoutPadding / 2f;
-        drawingCenterY = paddingTop + heightWithoutPadding / 2f;
+    private void calculateBounds(int w, int h) {
+        radius = w / 2f;
 
+        drawingCenterX = w / 2f;
+        drawingCenterY = h / 2f;
+
+        float strokeSizeOffset = (shouldDrawDot) ? Math.max(dotPaint.getStrokeWidth(), progressPaint.getStrokeWidth()) : progressPaint.getStrokeWidth(); // to prevent progress or dot from drawing over the bounds
         float halfOffset = strokeSizeOffset / 2f;
 
-        circleBounds.left = drawingCenterX - radius + halfOffset;
-        circleBounds.top = drawingCenterY - radius + halfOffset;
-        circleBounds.right = drawingCenterX + radius - halfOffset;
-        circleBounds.bottom = drawingCenterY + radius - halfOffset;
+        circleBounds.left = halfOffset;
+        circleBounds.top = halfOffset;
+        circleBounds.right = w - halfOffset;
+        circleBounds.bottom = h - halfOffset;
 
-        radius = circleBounds.width() / 2;
+        radius = circleBounds.width() / 2f;
 
         calculateTextBounds();
-
-        setMeasuredDimension(finalWidth, finalHeight);
     }
 
     @Override
@@ -400,6 +407,13 @@ public class CircularProgressIndicator extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, dp, metrics);
     }
 
+    // calculates circle bounds, view size and requests invalidation
+    private void invalidateEverything() {
+        calculateBounds(getWidth(), getHeight());
+        requestLayout();
+        invalidate();
+    }
+
     public void setProgressColor(@ColorInt int color) {
         progressPaint.setColor(color);
         invalidate();
@@ -418,8 +432,7 @@ public class CircularProgressIndicator extends View {
         progressPaint.setStrokeWidth(strokeWidth);
         progressBackgroundPaint.setStrokeWidth(strokeWidth);
 
-        requestLayout();
-        invalidate();
+        invalidateEverything();
     }
 
     public void setTextColor(@ColorInt int color) {
@@ -477,8 +490,7 @@ public class CircularProgressIndicator extends View {
     public void setDotWidthPx(@Dimension final int width) {
         dotPaint.setStrokeWidth(width);
 
-        requestLayout();
-        invalidate();
+        invalidateEverything();
     }
 
     public void setShouldUseDelimiter(boolean shouldUseDelimiter) {
@@ -490,8 +502,7 @@ public class CircularProgressIndicator extends View {
 
         calculateTextBounds();
 
-        requestLayout();
-        invalidate();
+        invalidateEverything();
     }
 
     public void setProgressTextDelimiter(@Nullable String delimiter) {
@@ -499,8 +510,7 @@ public class CircularProgressIndicator extends View {
 
         reformatProgressText();
 
-        requestLayout();
-        invalidate();
+        invalidateEverything();
     }
 
 
@@ -509,8 +519,7 @@ public class CircularProgressIndicator extends View {
 
         reformatProgressText();
 
-        requestLayout();
-        invalidate();
+        invalidateEverything();
     }
 
     public void setProgressTextSuffix(String suffix) {
@@ -518,8 +527,7 @@ public class CircularProgressIndicator extends View {
 
         reformatProgressText();
 
-        requestLayout();
-        invalidate();
+        invalidateEverything();
     }
 
     public void setProgressTextAdapter(@Nullable ProgressTextAdapter progressTextAdapter) {
@@ -532,8 +540,7 @@ public class CircularProgressIndicator extends View {
 
         reformatProgressText();
 
-        requestLayout();
-        invalidate();
+        invalidateEverything();
     }
 
     @ColorInt
@@ -605,7 +612,8 @@ public class CircularProgressIndicator extends View {
 
 
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
-    private @interface Direction { }
+    private @interface Direction {
+    }
 
 
     public interface ProgressTextAdapter {
