@@ -31,7 +31,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 @SuppressWarnings("FieldCanBeLocal")
 public class CircularProgressIndicator extends View {
 
-    private static int ANGLE_START_PROGRESS = 270;
+    private static int DEFAULT_PROGRESS_START_ANGLE = 270;
     private static int ANGLE_START_PROGRESS_BACKGROUND = 0;
     private static int ANGLE_END_PROGRESS_BACKGROUND = 360;
 
@@ -54,6 +54,7 @@ public class CircularProgressIndicator extends View {
     private Paint dotPaint;
     private Paint textPaint;
 
+    private int startAngle = DEFAULT_PROGRESS_START_ANGLE;
     private int sweepAngle = 0;
 
     private RectF circleBounds;
@@ -129,6 +130,11 @@ public class CircularProgressIndicator extends View {
             shouldDrawDot = a.getBoolean(R.styleable.CircularProgressIndicator_drawDot, shouldDrawDot);
             dotColor = a.getColor(R.styleable.CircularProgressIndicator_dotColor, progressColor);
             dotWidth = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_dotWidth, progressStrokeWidth);
+
+            startAngle = a.getInt(R.styleable.CircularProgressIndicator_startAngle, DEFAULT_PROGRESS_START_ANGLE);
+            if (startAngle < 0 || startAngle > 360) {
+                startAngle = DEFAULT_PROGRESS_START_ANGLE;
+            }
 
             shouldUseDelimiter = a.getBoolean(R.styleable.CircularProgressIndicator_useProgressTextDelimiter, shouldUseDelimiter);
             progressTextDelimiter = a.getString(R.styleable.CircularProgressIndicator_progressTextDelimiter);
@@ -278,11 +284,11 @@ public class CircularProgressIndicator extends View {
     }
 
     private void drawProgress(Canvas canvas) {
-        canvas.drawArc(circleBounds, ANGLE_START_PROGRESS, sweepAngle, false, progressPaint);
+        canvas.drawArc(circleBounds, startAngle, sweepAngle, false, progressPaint);
     }
 
     private void drawPoint(Canvas canvas) {
-        double angleRadians = Math.toRadians(-sweepAngle);
+        double angleRadians = Math.toRadians(-(sweepAngle + startAngle + 90));
         float cos = (float) Math.cos(angleRadians);
         float sin = (float) Math.sin(angleRadians);
         float x = circleBounds.centerX() - radius * sin;

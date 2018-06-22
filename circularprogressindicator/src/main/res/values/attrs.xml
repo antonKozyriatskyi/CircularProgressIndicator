@@ -19,6 +19,8 @@
         <attr name="dotColor" format="color" />
         <attr name="dotWidth" format="dimension" />
 
+        <attr name="startAngle" format="integer|reference" />
+
     </declare-styleable>
 
 </resources>
