@@ -533,6 +533,24 @@ public class CircularProgressIndicator extends View {
         return maxProgressValue;
     }
 
+    public int getStartAngle() {
+        return startAngle;
+    }
+
+    public void setStartAngle(int startAngle) {
+        this.startAngle = startAngle;
+        invalidate();
+    }
+
+    @Direction
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(@Direction int direction) {
+        this.direction = direction;
+        invalidate();
+    }
 
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
     private @interface Direction {
