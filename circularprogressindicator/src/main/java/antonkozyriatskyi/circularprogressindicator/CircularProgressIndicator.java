@@ -559,6 +559,7 @@ public class CircularProgressIndicator extends View {
 
     public interface ProgressTextAdapter {
 
+        @NonNull
         String formatText(double currentProgress);
     }
 }
