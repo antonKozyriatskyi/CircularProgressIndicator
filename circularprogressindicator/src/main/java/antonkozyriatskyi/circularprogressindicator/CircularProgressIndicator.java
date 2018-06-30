@@ -36,6 +36,9 @@ public class CircularProgressIndicator extends View {
     public static final int DIRECTION_CLOCKWISE = 0;
     public static final int DIRECTION_COUNTERCLOCKWISE = 1;
 
+    public static final int CAP_ROUND = 0;
+    public static final int CAP_BUTT = 1;
+
     private static final int DEFAULT_PROGRESS_START_ANGLE = 270;
     private static final int ANGLE_START_PROGRESS_BACKGROUND = 0;
     private static final int ANGLE_END_PROGRESS_BACKGROUND = 360;
@@ -114,6 +117,8 @@ public class CircularProgressIndicator extends View {
         int dotColor = progressColor;
         int dotWidth = progressStrokeWidth;
 
+        Paint.Cap progressStrokeCap = Paint.Cap.ROUND;
+
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressIndicator);
 
@@ -134,6 +139,9 @@ public class CircularProgressIndicator extends View {
 
             direction = a.getInt(R.styleable.CircularProgressIndicator_direction, DIRECTION_COUNTERCLOCKWISE);
 
+            int cap = a.getInt(R.styleable.CircularProgressIndicator_progressCap, CAP_ROUND);
+            progressStrokeCap = (cap == CAP_ROUND) ? Paint.Cap.ROUND : Paint.Cap.BUTT;
+
             String formattingPattern = a.getString(R.styleable.CircularProgressIndicator_formattingPattern);
             if (formattingPattern != null) {
                 progressTextAdapter = new PatternProgressTextAdapter(formattingPattern);
@@ -147,7 +155,7 @@ public class CircularProgressIndicator extends View {
         }
 
         progressPaint = new Paint();
-        progressPaint.setStrokeCap(Paint.Cap.ROUND);
+        progressPaint.setStrokeCap(progressStrokeCap);
         progressPaint.setStrokeWidth(progressStrokeWidth);
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setColor(progressColor);
@@ -553,10 +561,26 @@ public class CircularProgressIndicator extends View {
         invalidate();
     }
 
+    @Cap
+    public int getProgressStrokeCap() {
+        return (progressPaint.getStrokeCap() == Paint.Cap.ROUND) ? CAP_ROUND : CAP_BUTT;
+    }
+
+    public void setProgressStrokeCap(@Cap int cap) {
+        Paint.Cap paintCap = (cap == CAP_ROUND) ? Paint.Cap.ROUND : Paint.Cap.BUTT;
+        if (progressPaint.getStrokeCap() != paintCap) {
+            progressPaint.setStrokeCap(paintCap);
+            invalidate();
+        }
+    }
+
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
     private @interface Direction {
     }
 
+    @IntDef({CAP_ROUND, CAP_BUTT})
+    private @interface Cap {
+    }
 
     public interface ProgressTextAdapter {
 

@@ -22,6 +22,11 @@
             <enum name="counterclockwise" value="1"/>
         </attr>
 
+        <attr name="progressCap" format="enum">
+            <enum name="round" value="0"/>
+            <enum name="butt" value="1"/>
+        </attr>
+
     </declare-styleable>
 
 </resources>
