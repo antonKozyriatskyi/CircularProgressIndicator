@@ -575,11 +575,11 @@ public class CircularProgressIndicator extends View {
     }
 
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
-    private @interface Direction {
+    public @interface Direction {
     }
 
     @IntDef({CAP_ROUND, CAP_BUTT})
-    private @interface Cap {
+    public @interface Cap {
     }
 
     public interface ProgressTextAdapter {
