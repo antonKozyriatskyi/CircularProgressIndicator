@@ -97,7 +97,7 @@ The only thing you have to do is to provide an implementation of `CircularProgre
 You must override it's `String formatText(double currentProgress);` method.
 Library already provides you with two implementations:
 * [DefaultProgressTextAdapter](circularprogressindicator/src/main/java/antonkozyriatskyi/circularprogressindicator/DefaultProgressTextAdapter.java) that just returns string representation of the progress value cast to `int`.
-* [PatternProgressTextAdapter](circularprogressindicator/src/main/java/antonkozyriatskyi/circularprogressindicator/PatternProgressTextAdapter.java) that uses pattern specified in `formattingPattern` attribute to format progress (if it is set, otherwise it fallbacks to the `DefaultProgressTextAdapter`).
+* [PatternProgressTextAdapter](circularprogressindicator/src/main/java/antonkozyriatskyi/circularprogressindicator/PatternProgressTextAdapter.java) that uses pattern specified in `formattingPattern` attribute to format progress (if it is set, otherwise it falls back to the `DefaultProgressTextAdapter`).
 
 ##### Custom formatters' examples
 
