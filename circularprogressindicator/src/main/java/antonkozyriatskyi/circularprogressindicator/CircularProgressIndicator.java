@@ -84,6 +84,9 @@ public class CircularProgressIndicator extends View {
     @NonNull
     private ProgressTextAdapter progressTextAdapter;
 
+    @Nullable
+    private OnProgressChangeListener onProgressChangeListener;
+
     public CircularProgressIndicator(Context context) {
         super(context);
         init(context, null);
@@ -334,6 +337,10 @@ public class CircularProgressIndicator extends View {
         maxProgressValue = max;
         progressValue = Math.min(current, max);
 
+        if (onProgressChangeListener != null) {
+            onProgressChangeListener.onProgressChanged(progressValue, maxProgressValue);
+        }
+
         reformatProgressText();
         calculateTextBounds();
 
@@ -574,6 +581,15 @@ public class CircularProgressIndicator extends View {
         }
     }
 
+    public void setOnProgressChangeListener(@Nullable OnProgressChangeListener onProgressChangeListener) {
+        this.onProgressChangeListener = onProgressChangeListener;
+    }
+
+    @Nullable
+    public OnProgressChangeListener getOnProgressChangeListener() {
+        return onProgressChangeListener;
+    }
+
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
     public @interface Direction {
     }
@@ -586,5 +602,9 @@ public class CircularProgressIndicator extends View {
 
         @NonNull
         String formatText(double currentProgress);
+    }
+
+    public interface OnProgressChangeListener {
+        void onProgressChanged(double progress, double maxProgress);
     }
 }

@@ -171,6 +171,18 @@ Acceptable values are from 0 to 360 degrees. But be aware that they go clockwise
 
 ---
 
+#### Listening to progress changes
+```java
+circularProgress.setOnProgressChangeListener(new CircularProgressIndicator.OnProgressChangeListener() {
+            @Override
+            public void onProgressChanged(double progress, double maxProgress) {
+                Log.d("PROGRESS", String.format("Current: %1$.0f, max: %2$.0f", progress, maxProgress));
+            }
+        });
+```
+
+---
+
 ### Download using Gradle
 
 Add this in your root `build.gradle` at the end of `repositories` in `allprojects` section:

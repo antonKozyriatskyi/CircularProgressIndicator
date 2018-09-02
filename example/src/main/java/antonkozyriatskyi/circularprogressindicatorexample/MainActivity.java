@@ -3,6 +3,7 @@ package antonkozyriatskyi.circularprogressindicatorexample;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -78,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         circularProgress.setProgressStrokeCap(CircularProgressIndicator.CAP_ROUND);
                         break;
                 }
+            }
+        });
+
+        circularProgress.setOnProgressChangeListener(new CircularProgressIndicator.OnProgressChangeListener() {
+            @Override
+            public void onProgressChanged(double progress, double maxProgress) {
+                Log.d("PROGRESS", String.format("Current: %1$.0f, max: %2$.0f", progress, maxProgress));
             }
         });
     }
