@@ -23,6 +23,9 @@ Simple but customizable view for displaying progress
 ##### With custom start angle (details [here](#setting-start-angle))
 <img src="art/angle-45.png" width="30%" /> <img src="art/angle-333.png" width="30%" />
 
+##### With custom progress cap (details [here](#setting-start-angle))
+<img src="art/cap-round.png" width="30%" /> <img src="art/cap-butt.png" width="30%" />
+
 
 ## How to use
 
@@ -86,6 +89,7 @@ circularProgress.getMaxProgress() // returns 10000
 |  Formatting pattern to be used in `PatternProgressTextAdapter`. Checkout [Formatting progress text](#formatting-progress-text) section.             | `app:formattingPattern`           | setter: `setProgressTextAdapter(progressTextAdapter)`<br/>getter: `getProgressTextAdapter()`                                                             | not specified                 |
 |  Direction of the progress arc (`clockwise` or `counterclockwise`)                                                                                  | `app:direction`                   | setter: `setDirection(direction)`<br/>getter: `getDirection()`                                                                                           | `counterclockwise`            |
 |  Start angle. Checkout [Start angle](#setting-start-angle) section.                                                                                 | `app:startAngle`                  | setter: `setStartAngle(startAngle)`<br/>getter: `getStartAngle()`                                                                                        | `270`                         |
+|  Progress cap                                                                                                                                       | `app:progressCap`                 | setter: `setProgressStrokeCap(cap)`<br/>getter: `getProgressStrokeCap()`                                                                                 | `CAP_ROUND`                   |
 
 ---
 
