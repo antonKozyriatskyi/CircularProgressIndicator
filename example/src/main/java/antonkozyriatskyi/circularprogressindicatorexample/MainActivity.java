@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
@@ -62,6 +63,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 circularProgress.setProgressTextAdapter(isChecked ? TIME_TEXT_ADAPTER : null);
+            }
+        });
+
+        RadioGroup progressCap = findViewById(R.id.rg_cap);
+        progressCap.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_cap_butt:
+                        circularProgress.setProgressStrokeCap(CircularProgressIndicator.CAP_BUTT);
+                        break;
+                    case R.id.rb_cap_round:
+                        circularProgress.setProgressStrokeCap(CircularProgressIndicator.CAP_ROUND);
+                        break;
+                }
             }
         });
     }

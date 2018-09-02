@@ -104,6 +104,32 @@
                 android:min="0"
                 android:progress="8" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="Progress cap" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:id="@+id/rg_cap"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rb_cap_round"
+                    android:checked="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Round" />
+
+                <RadioButton
+                    android:id="@+id/rb_cap_butt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Butt" />
+
+            </RadioGroup>
 
             <Button
                 android:id="@+id/btn_progress_color"
