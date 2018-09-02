@@ -71,10 +71,12 @@ public class CircularProgressIndicator extends View {
 
     private float radius;
 
-    private boolean shouldDrawDot = true;
+    private boolean shouldDrawDot;
 
     private double maxProgressValue = 100.0;
     private double progressValue = 0.0;
+
+    private boolean isAnimationEnabled;
 
     @Direction
     private int direction = DIRECTION_COUNTERCLOCKWISE;
@@ -131,7 +133,7 @@ public class CircularProgressIndicator extends View {
             textColor = a.getColor(R.styleable.CircularProgressIndicator_textColor, progressColor);
             textSize = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_textSize, textSize);
 
-            shouldDrawDot = a.getBoolean(R.styleable.CircularProgressIndicator_drawDot, shouldDrawDot);
+            shouldDrawDot = a.getBoolean(R.styleable.CircularProgressIndicator_drawDot, true);
             dotColor = a.getColor(R.styleable.CircularProgressIndicator_dotColor, progressColor);
             dotWidth = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_dotWidth, progressStrokeWidth);
 
@@ -139,6 +141,8 @@ public class CircularProgressIndicator extends View {
             if (startAngle < 0 || startAngle > 360) {
                 startAngle = DEFAULT_PROGRESS_START_ANGLE;
             }
+
+            isAnimationEnabled = a.getBoolean(R.styleable.CircularProgressIndicator_enableProgressAnimation, true);
 
             direction = a.getInt(R.styleable.CircularProgressIndicator_direction, DIRECTION_COUNTERCLOCKWISE);
 
@@ -330,8 +334,6 @@ public class CircularProgressIndicator extends View {
             finalAngle = current / max * 360;
         }
 
-        final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, sweepAngle, (int) finalAngle);
-
         double oldCurrentProgress = progressValue;
 
         maxProgressValue = max;
@@ -344,9 +346,18 @@ public class CircularProgressIndicator extends View {
         reformatProgressText();
         calculateTextBounds();
 
-        if (progressAnimator != null) {
-            progressAnimator.cancel();
+        stopProgressAnimation();
+
+        if (isAnimationEnabled) {
+            startProgressAnimation(oldCurrentProgress, finalAngle);
+        } else {
+            sweepAngle = (int) finalAngle;
+            invalidate();
         }
+    }
+
+    private void startProgressAnimation(double oldCurrentProgress, final double finalAngle) {
+        final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, sweepAngle, (int) finalAngle);
 
         progressAnimator = ValueAnimator.ofObject(new TypeEvaluator<Double>() {
             @Override
@@ -368,11 +379,17 @@ public class CircularProgressIndicator extends View {
             @Override
             public void onAnimationCancel(Animator animation) {
                 sweepAngle = (int) finalAngle;
-
+                invalidate();
                 progressAnimator = null;
             }
         });
         progressAnimator.start();
+    }
+
+    private void stopProgressAnimation() {
+        if (progressAnimator != null) {
+            progressAnimator.cancel();
+        }
     }
 
     private void reformatProgressText() {
@@ -588,6 +605,16 @@ public class CircularProgressIndicator extends View {
     @Nullable
     public OnProgressChangeListener getOnProgressChangeListener() {
         return onProgressChangeListener;
+    }
+
+    public void setAnimationEnabled(boolean enableAnimation) {
+        isAnimationEnabled = enableAnimation;
+
+        if (!enableAnimation) stopProgressAnimation();
+    }
+
+    public boolean isAnimationEnabled() {
+        return isAnimationEnabled;
     }
 
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})

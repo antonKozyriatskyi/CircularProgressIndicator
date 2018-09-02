@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Switch;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
@@ -86,6 +87,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onProgressChanged(double progress, double maxProgress) {
                 Log.d("PROGRESS", String.format("Current: %1$.0f, max: %2$.0f", progress, maxProgress));
+            }
+        });
+
+        Switch animationSwitch = findViewById(R.id.sw_enable_animation);
+        animationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                circularProgress.setAnimationEnabled(isChecked);
             }
         });
     }

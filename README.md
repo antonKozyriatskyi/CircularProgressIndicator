@@ -90,6 +90,7 @@ circularProgress.getMaxProgress() // returns 10000
 |  Direction of the progress arc (`clockwise` or `counterclockwise`)                                                                                  | `app:direction`                   | setter: `setDirection(direction)`<br/>getter: `getDirection()`                                                                                           | `counterclockwise`            |
 |  Start angle. Checkout [Start angle](#setting-start-angle) section.                                                                                 | `app:startAngle`                  | setter: `setStartAngle(startAngle)`<br/>getter: `getStartAngle()`                                                                                        | `270`                         |
 |  Progress cap                                                                                                                                       | `app:progressCap`                 | setter: `setProgressStrokeCap(cap)`<br/>getter: `getProgressStrokeCap()`                                                                                 | `CAP_ROUND`                   |
+|  Progress animation                                                                                                                                 | `app:enableProgressAnimation`     | setter: `setAnimationEnabled(enableAnimation)`<br/>getter: `isAnimationEnabled()`                                                                        | `true`                        |
 
 ---
 

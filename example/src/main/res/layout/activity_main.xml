@@ -107,20 +107,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp"
                 android:text="Progress cap" />
 
             <RadioGroup
-                android:layout_width="match_parent"
                 android:id="@+id/rg_cap"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioButton
                     android:id="@+id/rb_cap_round"
-                    android:checked="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="Round" />
 
                 <RadioButton
@@ -130,6 +130,13 @@
                     android:text="Butt" />
 
             </RadioGroup>
+
+            <Switch
+                android:id="@+id/sw_enable_animation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Enable animation" />
 
             <Button
                 android:id="@+id/btn_progress_color"

@@ -18,14 +18,16 @@
         <attr name="startAngle" format="integer|reference" />
 
         <attr name="direction" format="enum">
-            <enum name="clockwise" value="0"/>
-            <enum name="counterclockwise" value="1"/>
+            <enum name="clockwise" value="0" />
+            <enum name="counterclockwise" value="1" />
         </attr>
 
         <attr name="progressCap" format="enum">
-            <enum name="round" value="0"/>
-            <enum name="butt" value="1"/>
+            <enum name="round" value="0" />
+            <enum name="butt" value="1" />
         </attr>
+
+        <attr name="enableProgressAnimation" format="boolean" />
 
     </declare-styleable>
 
