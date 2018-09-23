@@ -26,6 +26,9 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Created by Anton on 03.03.2018.
  */
@@ -115,6 +118,7 @@ public class CircularProgressIndicator extends View {
         int progressColor = Color.parseColor(DEFAULT_PROGRESS_COLOR);
         int progressBackgroundColor = Color.parseColor(DEFAULT_PROGRESS_BACKGROUND_COLOR);
         int progressStrokeWidth = dp2px(DEFAULT_STROKE_WIDTH_DP);
+        int progressBackgroundStrokeWidth = progressStrokeWidth;
         int textColor = progressColor;
         int textSize = sp2px(DEFAULT_TEXT_SIZE_SP);
 
@@ -130,6 +134,7 @@ public class CircularProgressIndicator extends View {
             progressColor = a.getColor(R.styleable.CircularProgressIndicator_progressColor, progressColor);
             progressBackgroundColor = a.getColor(R.styleable.CircularProgressIndicator_progressBackgroundColor, progressBackgroundColor);
             progressStrokeWidth = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_progressStrokeWidth, progressStrokeWidth);
+            progressBackgroundStrokeWidth = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_progressBackgroundStrokeWidth, progressStrokeWidth);
             textColor = a.getColor(R.styleable.CircularProgressIndicator_textColor, progressColor);
             textSize = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_textSize, textSize);
 
@@ -170,7 +175,7 @@ public class CircularProgressIndicator extends View {
 
         progressBackgroundPaint = new Paint();
         progressBackgroundPaint.setStyle(Paint.Style.STROKE);
-        progressBackgroundPaint.setStrokeWidth(progressStrokeWidth);
+        progressBackgroundPaint.setStrokeWidth(progressBackgroundStrokeWidth);
         progressBackgroundPaint.setColor(progressBackgroundColor);
         progressBackgroundPaint.setAntiAlias(true);
 
@@ -208,7 +213,12 @@ public class CircularProgressIndicator extends View {
         Rect textBoundsRect = new Rect();
         textPaint.getTextBounds(progressText, 0, progressText.length(), textBoundsRect);
 
-        float strokeSizeOffset = (shouldDrawDot) ? Math.max(dotPaint.getStrokeWidth(), progressPaint.getStrokeWidth()) : progressPaint.getStrokeWidth(); // to prevent progress or dot from drawing over the bounds
+
+        float dotWidth = dotPaint.getStrokeWidth();
+        float progressWidth = progressPaint.getStrokeWidth();
+        float progressBackgroundWidth = progressBackgroundPaint.getStrokeWidth();
+        float strokeSizeOffset = (shouldDrawDot) ? Math.max(dotWidth, Math.max(progressWidth, progressBackgroundWidth)) : Math.max(progressWidth, progressBackgroundWidth);
+
         int desiredSize = ((int) strokeSizeOffset) + dp2px(DESIRED_WIDTH_DP) +
                 Math.max(paddingBottom + paddingTop, paddingLeft + paddingRight);
 
@@ -256,7 +266,10 @@ public class CircularProgressIndicator extends View {
     private void calculateBounds(int w, int h) {
         radius = w / 2f;
 
-        float strokeSizeOffset = (shouldDrawDot) ? Math.max(dotPaint.getStrokeWidth(), progressPaint.getStrokeWidth()) : progressPaint.getStrokeWidth(); // to prevent progress or dot from drawing over the bounds
+        float dotWidth = dotPaint.getStrokeWidth();
+        float progressWidth = progressPaint.getStrokeWidth();
+        float progressBackgroundWidth = progressBackgroundPaint.getStrokeWidth();
+        float strokeSizeOffset = (shouldDrawDot) ? Math.max(dotWidth, Math.max(progressWidth, progressBackgroundWidth)) : Math.max(progressWidth, progressBackgroundWidth); // to prevent progress or dot from drawing over the bounds
         float halfOffset = strokeSizeOffset / 2f;
 
         circleBounds.left = halfOffset;
@@ -436,8 +449,17 @@ public class CircularProgressIndicator extends View {
         setProgressStrokeWidthPx(dp2px(strokeWidth));
     }
 
-    public void setProgressStrokeWidthPx(@Dimension final int strokeWidth) {
+    public void setProgressStrokeWidthPx(@Dimension int strokeWidth) {
         progressPaint.setStrokeWidth(strokeWidth);
+
+        invalidateEverything();
+    }
+
+    public void setProgressBackgroundStrokeWidthDp(@Dimension int strokeWidth) {
+        setProgressBackgroundStrokeWidthPx(dp2px(strokeWidth));
+    }
+
+    public void setProgressBackgroundStrokeWidthPx(@Dimension int strokeWidth) {
         progressBackgroundPaint.setStrokeWidth(strokeWidth);
 
         invalidateEverything();
@@ -495,7 +517,7 @@ public class CircularProgressIndicator extends View {
         setDotWidthPx(dp2px(width));
     }
 
-    public void setDotWidthPx(@Dimension final int width) {
+    public void setDotWidthPx(@Dimension int width) {
         dotPaint.setStrokeWidth(width);
 
         invalidateEverything();
@@ -533,6 +555,9 @@ public class CircularProgressIndicator extends View {
         return progressPaint.getStrokeWidth();
     }
 
+    public float getProgressBackgroundStrokeWidth() {
+        return progressBackgroundPaint.getStrokeWidth();
+    }
 
     @ColorInt
     public int getTextColor() {
@@ -617,10 +642,12 @@ public class CircularProgressIndicator extends View {
         return isAnimationEnabled;
     }
 
+    @Retention(RetentionPolicy.SOURCE)
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
     public @interface Direction {
     }
 
+    @Retention(RetentionPolicy.SOURCE)
     @IntDef({CAP_ROUND, CAP_BUTT})
     public @interface Cap {
     }

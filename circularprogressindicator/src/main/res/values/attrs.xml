@@ -5,6 +5,7 @@
         <attr name="progressColor" format="color" />
         <attr name="progressBackgroundColor" format="color" />
         <attr name="progressStrokeWidth" format="dimension" />
+        <attr name="progressBackgroundStrokeWidth" format="dimension" />
 
         <attr name="textColor" format="color" />
         <attr name="textSize" format="dimension" />
