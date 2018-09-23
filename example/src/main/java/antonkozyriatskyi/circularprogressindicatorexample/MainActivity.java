@@ -69,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 circularProgress.setProgressTextAdapter(isChecked ? TIME_TEXT_ADAPTER : null);
             }
         });
+        CheckBox fillBackground = findViewById(R.id.cb_fill_background);
+        fillBackground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                circularProgress.setFillBackgroundEnabled(isChecked);
+            }
+        });
 
         RadioGroup progressCap = findViewById(R.id.rg_cap);
         progressCap.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

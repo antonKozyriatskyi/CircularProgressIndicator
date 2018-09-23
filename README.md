@@ -26,8 +26,11 @@ Simple but customizable view for displaying progress
 ##### With custom progress cap (details [here](#setting-start-angle))
 <img src="art/cap-round.png" width="30%" /> <img src="art/cap-butt.png" width="30%" />
 
-##### With different progress foreground and background rings' width (details [here](#setting-start-angle))
-<img src="art/background-width-1.png" width="30%" /> <img src="art/background-width-1.png" width="30%" />
+##### With different progress foreground and background rings' width
+<img src="art/background-width-1.png" width="30%" /> <img src="art/background-width-2.png" width="30%" />
+
+##### With background filling enabled/disabled
+<img src="art/background-filling-1.png" width="30%" /> <img src="art/background-filling-2.png" width="30%" /> <img src="art/background-filling-3.png" width="30%" />
 
 
 ## How to use
@@ -54,7 +57,8 @@ Add view to your layout:
         app:progressStrokeWidth="16dp"
         app:startAngle="270"
         app:textColor="#fffc59"
-        app:textSize="14sp" />
+        app:textSize="14sp"
+        app:fillBackground="false" />
 ```
 
 Since all attributes have default values, you can specify none of them. Thus following code also works:
@@ -88,7 +92,7 @@ circularProgress.getMaxProgress() // returns 10000
 |  Description                                                                                                                                        | XML                                  | Java                                                                                                                                                                                     | Default value                 |
 |  -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 |  Progress color                                                                                                                                     | `app:progressColor`                  | setter: `setProgressColor(color)`<br/>getter: `getProgressColor()`                                                                                                                       | `#3f51b5`                     |
-|  Progress background  color                                                                                                                         | `app:progressBackgroundColor`        | setter: `setProgressBackgroundColor(color)`<br/>getter: `getProgressBackgroundColor()`                                                                                                   | `#e0e0e0`                     |
+|  Progress background color                                                                                                                          | `app:progressBackgroundColor`        | setter: `setProgressBackgroundColor(color)`<br/>getter: `getProgressBackgroundColor()`                                                                                                   | `#e0e0e0`                     |
 |  Width of progress stroke                                                                                                                           | `app:progressStrokeWidth`            | setters: `setProgressStrokeWidthDp(widthInDp)` or `setProgressStrokeWidthPx(widthInPx)`<br/>getter: `getProgressStrokeWidth()` (returns width in pixels)                                 | `8dp`                         |
 |  Width of progress background stroke                                                                                                                | `app:progressBackgroundStrokeWidth`  | setters: `setProgressBackgroundStrokeWidthDp(widthInDp)` or `setProgressBackgroundStrokeWidthPx(widthInPx)`<br/>getter: `getProgressBackgroundStrokeWidth()` (returns width in pixels)   | same as progress width        |
 |  Whether to draw dot. `true` or `false`                                                                                                             | `app:drawDot`                        | setter: `setShouldDrawDot(shoulDrawDot)`<br/>getter: `isDotEnabled()`                                                                                                                    | `true`                        |
@@ -101,6 +105,7 @@ circularProgress.getMaxProgress() // returns 10000
 |  Start angle. Checkout [Start angle](#setting-start-angle) section.                                                                                 | `app:startAngle`                     | setter: `setStartAngle(startAngle)`<br/>getter: `getStartAngle()`                                                                                                                        | `270`                         |
 |  Progress cap                                                                                                                                       | `app:progressCap`                    | setter: `setProgressStrokeCap(cap)`<br/>getter: `getProgressStrokeCap()`                                                                                                                 | `CAP_ROUND`                   |
 |  Progress animation                                                                                                                                 | `app:enableProgressAnimation`        | setter: `setAnimationEnabled(enableAnimation)`<br/>getter: `isAnimationEnabled()`                                                                                                        | `true`                        |
+|  Whether to fill background with progress background color                                                                                          | `app:fillBackground`                 | setter: `setFillBackgroundEnabled(enable)`<br/>getter: `isFillBackgroundEnabled()`                                                                                                       | `false`                       |
 
 ---
 
@@ -207,7 +212,7 @@ allprojects {
 
 Then add this dependency to your **module-level** `build.gradle` in `dependencies` section:
 ```groovy
-implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.2.1'
+implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.2.2'
 ```
 
 If you have any troubles downloading the library - checkout [issue#5](https://github.com/antonKozyriatskyi/CircularProgressIndicator/issues/5)
