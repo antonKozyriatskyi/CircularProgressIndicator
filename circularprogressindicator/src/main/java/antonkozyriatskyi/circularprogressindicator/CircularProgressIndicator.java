@@ -81,6 +81,8 @@ public class CircularProgressIndicator extends View {
 
     private boolean isAnimationEnabled;
 
+    private boolean isFillBackgroundEnabled;
+
     @Direction
     private int direction = DIRECTION_COUNTERCLOCKWISE;
 
@@ -148,6 +150,7 @@ public class CircularProgressIndicator extends View {
             }
 
             isAnimationEnabled = a.getBoolean(R.styleable.CircularProgressIndicator_enableProgressAnimation, true);
+            isFillBackgroundEnabled = a.getBoolean(R.styleable.CircularProgressIndicator_fillBackground, false);
 
             direction = a.getInt(R.styleable.CircularProgressIndicator_direction, DIRECTION_COUNTERCLOCKWISE);
 
@@ -173,8 +176,9 @@ public class CircularProgressIndicator extends View {
         progressPaint.setColor(progressColor);
         progressPaint.setAntiAlias(true);
 
+        Paint.Style progressBackgroundStyle = isFillBackgroundEnabled ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE;
         progressBackgroundPaint = new Paint();
-        progressBackgroundPaint.setStyle(Paint.Style.STROKE);
+        progressBackgroundPaint.setStyle(progressBackgroundStyle);
         progressBackgroundPaint.setStrokeWidth(progressBackgroundStrokeWidth);
         progressBackgroundPaint.setColor(progressBackgroundColor);
         progressBackgroundPaint.setAntiAlias(true);
@@ -640,6 +644,21 @@ public class CircularProgressIndicator extends View {
 
     public boolean isAnimationEnabled() {
         return isAnimationEnabled;
+    }
+
+    public void setFillBackgroundEnabled(boolean fillBackgroundEnabled) {
+        if (fillBackgroundEnabled == isFillBackgroundEnabled) return;
+
+        isFillBackgroundEnabled = fillBackgroundEnabled;
+
+        Paint.Style style = fillBackgroundEnabled ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE;
+        progressBackgroundPaint.setStyle(style);
+
+        invalidate();
+    }
+
+    public boolean isFillBackgroundEnabled() {
+        return isFillBackgroundEnabled;
     }
 
     @Retention(RetentionPolicy.SOURCE)

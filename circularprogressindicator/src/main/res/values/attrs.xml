@@ -30,6 +30,8 @@
 
         <attr name="enableProgressAnimation" format="boolean" />
 
+        <attr name="fillBackground" format="boolean" />
+
     </declare-styleable>
 
 </resources>
