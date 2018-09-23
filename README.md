@@ -30,7 +30,7 @@ Simple but customizable view for displaying progress
 <img src="art/background-width-1.png" width="30%" /> <img src="art/background-width-1.png" width="30%" />
 
 ##### With background filling enabled/disabled
-<img src="art/background-filling-1.png" width="30%" /> <img src="art/background-filling-2.png" width="30%" />
+<img src="art/background-filling-1.png" width="30%" /> <img src="art/background-filling-2.png" width="30%" /> <img src="art/background-filling-3.png" width="30%" />
 
 
 ## How to use
