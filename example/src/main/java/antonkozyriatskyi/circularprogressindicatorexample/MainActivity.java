@@ -43,11 +43,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         SeekBar progress = findViewById(R.id.sb_progress);
         SeekBar progressStrokeWidth = findViewById(R.id.sb_progress_width);
+        final SeekBar progressBackgroundStrokeWidth = findViewById(R.id.sb_progress_background_width);
         SeekBar textSize = findViewById(R.id.sb_text_size);
         dotWidth = findViewById(R.id.sb_dot_width);
 
         progress.setOnSeekBarChangeListener(this);
         progressStrokeWidth.setOnSeekBarChangeListener(this);
+        progressBackgroundStrokeWidth.setOnSeekBarChangeListener(this);
         textSize.setOnSeekBarChangeListener(this);
         dotWidth.setOnSeekBarChangeListener(this);
 
@@ -136,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.sb_text_size:
                 circularProgress.setTextSizeSp(progress);
+                break;
+            case R.id.sb_progress_background_width:
+                circularProgress.setProgressBackgroundStrokeWidthDp(progress);
                 break;
         }
     }

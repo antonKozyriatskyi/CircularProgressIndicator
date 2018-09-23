@@ -74,6 +74,21 @@
                 android:min="0"
                 android:progress="8" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Progress background stroke width" />
+
+            <SeekBar
+                android:id="@+id/sb_progress_background_width"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:max="64"
+                android:min="0"
+                android:progress="8" />
+
             <CheckBox
                 android:id="@+id/cb_draw_dot"
                 android:layout_width="match_parent"
