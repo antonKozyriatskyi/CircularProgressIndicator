@@ -199,6 +199,15 @@ circularProgress.setOnProgressChangeListener(new CircularProgressIndicator.OnPro
 
 ---
 
+#### Setting interpolator
+Default interpolator used for running animation is `AccelerateDecelerateInterpolator`,
+but you can set any other one using setter:
+```java
+circularProgress.setInterpolator(new LinearInterpolator());
+```
+
+---
+
 ### Download using Gradle
 
 Add this in your root `build.gradle` at the end of `repositories` in `allprojects` section:

@@ -25,6 +25,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -93,6 +94,9 @@ public class CircularProgressIndicator extends View {
 
     @Nullable
     private OnProgressChangeListener onProgressChangeListener;
+
+    @NonNull
+    private Interpolator animationInterpolator = new AccelerateDecelerateInterpolator();
 
     public CircularProgressIndicator(Context context) {
         super(context);
@@ -384,7 +388,7 @@ public class CircularProgressIndicator extends View {
         }, oldCurrentProgress, progressValue);
         progressAnimator.setDuration(DEFAULT_ANIMATION_DURATION);
         progressAnimator.setValues(angleProperty);
-        progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        progressAnimator.setInterpolator(animationInterpolator);
         progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -659,6 +663,15 @@ public class CircularProgressIndicator extends View {
 
     public boolean isFillBackgroundEnabled() {
         return isFillBackgroundEnabled;
+    }
+
+    public void setInterpolator(@NonNull Interpolator interpolator) {
+        animationInterpolator = interpolator;
+    }
+
+    @NonNull
+    public Interpolator getInterpolator() {
+        return animationInterpolator;
     }
 
     @Retention(RetentionPolicy.SOURCE)
