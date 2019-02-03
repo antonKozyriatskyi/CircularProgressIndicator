@@ -32,6 +32,14 @@
 
         <attr name="fillBackground" format="boolean" />
 
+        <attr name="gradientEndColor" format="color|reference"/>
+        <attr name="gradientType" format="enum">
+            <enum name="no_gradient" value="0"/>
+            <enum name="linear" value="1"/>
+            <enum name="radial" value="2"/>
+            <enum name="sweep" value="3"/>
+        </attr>
+
     </declare-styleable>
 
 </resources>

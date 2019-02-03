@@ -32,6 +32,9 @@ Simple but customizable view for displaying progress
 ##### With background filling enabled/disabled
 <img src="art/background-filling-1.png" width="30%" /> <img src="art/background-filling-2.png" width="30%" /> <img src="art/background-filling-3.png" width="30%" />
 
+##### With gradients [linear, sweep and radial] (details [here](#gradients))
+<img src="art/gradient_linear.png" width="30%" /> <img src="art/gradient_sweep.png" width="30%" /> <img src="art/gradient_radial.png" width="30%" />
+
 
 ## How to use
 
@@ -58,7 +61,9 @@ Add view to your layout:
         app:startAngle="270"
         app:textColor="#fffc59"
         app:textSize="14sp"
-        app:fillBackground="false" />
+        app:fillBackground="false"
+        app:gradientType="linear"
+        app:gradientEndColor="@color/colorAccent" />
 ```
 
 Since all attributes have default values, you can specify none of them. Thus following code also works:
@@ -106,6 +111,8 @@ circularProgress.getMaxProgress() // returns 10000
 |  Progress cap                                                                                                                                       | `app:progressCap`                    | setter: `setProgressStrokeCap(cap)`<br/>getter: `getProgressStrokeCap()`                                                                                                                 | `CAP_ROUND`                   |
 |  Progress animation                                                                                                                                 | `app:enableProgressAnimation`        | setter: `setAnimationEnabled(enableAnimation)`<br/>getter: `isAnimationEnabled()`                                                                                                        | `true`                        |
 |  Whether to fill background with progress background color                                                                                          | `app:fillBackground`                 | setter: `setFillBackgroundEnabled(enable)`<br/>getter: `isFillBackgroundEnabled()`                                                                                                       | `false`                       |
+|  Gradient type                                                                                                                                      | `app:gradientType`                   | setter: `setGradient(type, color)`<br/>getter: `getGradientType()`                                                                                                                       | `no_gradient`                 |
+|  End color of a gradient                                                                                                                            | `app:gradientEndColor`               | -                                                                                                                                                                                        | -                             |
 
 ---
 
@@ -204,6 +211,38 @@ Default interpolator used for running animation is `AccelerateDecelerateInterpol
 but you can set any other one using setter:
 ```java
 circularProgress.setInterpolator(new LinearInterpolator());
+```
+
+---
+
+#### Gradients
+`CircularProgressIndicator` supports 3 types of gradient:
+- Linear
+- Radial (doesn't look really good)
+- Sweep
+
+They can be setup using attribute `app:gradientType"` that accepts 4 values:
+- `linear`
+- `radial`
+- `sweep`
+- `no_gradient`- default one, can also be used to remove gradient
+You also must specify end color using `app:gradientEndColor="color|reference"` attribute.
+
+Or you can set it in code:
+```java
+int endColor = Color.MAGENTA;
+
+/* Must be one of:
+*  - LINEAR_GRADIENT 
+*  - RADIAL_GRADIENT 
+*  - SWEEP_GRADIENT 
+*  - NO_GRADIENT
+* */
+int gradientType = CircularProgressIndicator.LINEAR_GRADIENT;
+
+circularProgress.setGradient(gradientType, endColor);
+
+circularProgress.getGradientType(); //returns LINEAR_GRADIENT
 ```
 
 ---

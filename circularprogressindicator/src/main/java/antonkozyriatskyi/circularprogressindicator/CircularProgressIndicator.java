@@ -9,9 +9,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.SweepGradient;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
@@ -42,6 +47,11 @@ public class CircularProgressIndicator extends View {
 
     public static final int CAP_ROUND = 0;
     public static final int CAP_BUTT = 1;
+
+    public static final int NO_GRADIENT = 0;
+    public static final int LINEAR_GRADIENT = 1;
+    public static final int RADIAL_GRADIENT = 2;
+    public static final int SWEEP_GRADIENT = 3;
 
     private static final int DEFAULT_PROGRESS_START_ANGLE = 270;
     private static final int ANGLE_START_PROGRESS_BACKGROUND = 0;
@@ -170,6 +180,22 @@ public class CircularProgressIndicator extends View {
 
             reformatProgressText();
 
+            final int gradientType = a.getColor(R.styleable.CircularProgressIndicator_gradientType, 0);
+            if (gradientType != NO_GRADIENT) {
+                final int gradientColorEnd = a.getColor(R.styleable.CircularProgressIndicator_gradientEndColor, -1);
+
+                if (gradientColorEnd == -1) {
+                    throw new IllegalArgumentException("did you forget to specify gradientColorEnd?");
+                }
+
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setGradient(gradientType, gradientColorEnd);
+                    }
+                });
+            }
+
             a.recycle();
         }
 
@@ -269,6 +295,11 @@ public class CircularProgressIndicator extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         calculateBounds(w, h);
+
+        Shader shader = progressPaint.getShader();
+        if (shader instanceof RadialGradient) {
+            RadialGradient gradient = (RadialGradient) shader;
+        }
     }
 
     private void calculateBounds(int w, int h) {
@@ -674,6 +705,54 @@ public class CircularProgressIndicator extends View {
         return animationInterpolator;
     }
 
+    public void setGradient(@GradientType int type, @ColorInt int endColor) {
+        Shader gradient = null;
+
+        float cx = getWidth() / 2f;
+        float cy = getHeight() / 2f;
+
+        int startColor = progressPaint.getColor();
+
+        switch (type) {
+            case LINEAR_GRADIENT:
+                gradient = new LinearGradient(0f, 0f, getWidth(), getHeight(), startColor, endColor, Shader.TileMode.CLAMP);
+                break;
+            case RADIAL_GRADIENT:
+                gradient = new RadialGradient(cx, cy, cx, startColor, endColor, Shader.TileMode.MIRROR);
+                break;
+            case SWEEP_GRADIENT:
+                gradient = new SweepGradient(cx, cy, new int[]{startColor, endColor}, null);
+                break;
+        }
+
+        if (gradient != null) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(startAngle, cx, cy);
+            gradient.setLocalMatrix(matrix);
+        }
+
+        progressPaint.setShader(gradient);
+
+        invalidate();
+    }
+
+    @GradientType
+    public int getGradientType() {
+        Shader shader = progressPaint.getShader();
+
+        int type = NO_GRADIENT;
+
+        if (shader instanceof LinearGradient) {
+            type = LINEAR_GRADIENT;
+        } else if (shader instanceof RadialGradient) {
+            type = RADIAL_GRADIENT;
+        } else if (shader instanceof SweepGradient) {
+            type = SWEEP_GRADIENT;
+        }
+
+        return type;
+    }
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({DIRECTION_CLOCKWISE, DIRECTION_COUNTERCLOCKWISE})
     public @interface Direction {
@@ -682,6 +761,11 @@ public class CircularProgressIndicator extends View {
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({CAP_ROUND, CAP_BUTT})
     public @interface Cap {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({NO_GRADIENT, LINEAR_GRADIENT, RADIAL_GRADIENT, SWEEP_GRADIENT})
+    public @interface GradientType {
     }
 
     public interface ProgressTextAdapter {

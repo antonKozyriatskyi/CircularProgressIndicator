@@ -5,12 +5,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.Switch;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
@@ -106,6 +112,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 circularProgress.setAnimationEnabled(isChecked);
             }
         });
+
+        Spinner gradientType = findViewById(R.id.sp_gradient_type);
+
+        final ArrayList<HashMap<String, String>> gradients = new ArrayList<>();
+        HashMap<String, String> gradient = new HashMap<>();
+        gradient.put("type", "No gradient");
+        gradient.put("value", "0");
+        gradients.add(gradient);
+
+        gradient = new HashMap<>();
+        gradient.put("type", "Linear");
+        gradient.put("value", "1");
+        gradients.add(gradient);
+
+        gradient = new HashMap<>();
+        gradient.put("type", "Radial");
+        gradient.put("value", "2");
+        gradients.add(gradient);
+
+        gradient = new HashMap<>();
+        gradient.put("type", "Sweep");
+        gradient.put("value", "3");
+        gradients.add(gradient);
+
+
+        gradientType.setAdapter(
+                new SimpleAdapter(
+                        this,
+                        gradients,
+                        android.R.layout.simple_dropdown_item_1line,
+                        new String[]{"type"},
+                        new int[]{android.R.id.text1}
+                ));
+
+        gradientType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                circularProgress.setGradient(Integer.parseInt(gradients.get(position).get("value")), Color.MAGENTA);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     @Override
@@ -154,12 +204,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
     }
 
     @Override
