@@ -260,7 +260,7 @@ allprojects {
 
 Then add this dependency to your **module-level** `build.gradle` in `dependencies` section:
 ```groovy
-implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.2.2'
+implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.3.0'
 ```
 
 If you have any troubles downloading the library - checkout [issue#5](https://github.com/antonKozyriatskyi/CircularProgressIndicator/issues/5)
