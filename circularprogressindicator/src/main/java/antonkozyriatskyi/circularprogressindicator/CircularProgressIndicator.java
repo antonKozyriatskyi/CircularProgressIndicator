@@ -6,6 +6,7 @@ import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
@@ -24,6 +26,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -82,6 +85,18 @@ public class CircularProgressIndicator extends View {
     private String progressText;
     private float textX;
     private float textY;
+
+    private ResourcesCompat.FontCallback fontCallback = new ResourcesCompat.FontCallback() {
+        @Override
+        public void onFontRetrieved(@NonNull Typeface typeface) {
+            setTextFont(typeface);
+        }
+
+        @Override
+        public void onFontRetrievalFailed(int reason) {
+
+        }
+    };
 
     private float radius;
 
@@ -153,6 +168,17 @@ public class CircularProgressIndicator extends View {
             progressBackgroundStrokeWidth = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_progressBackgroundStrokeWidth, progressStrokeWidth);
             textColor = a.getColor(R.styleable.CircularProgressIndicator_textColor, progressColor);
             textSize = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_textSize, textSize);
+
+            String fontPath = a.getString(R.styleable.CircularProgressIndicator_textFont);
+            if (fontPath != null && !fontPath.isEmpty()) {
+                try {
+                    int fontResourceId = a.getResourceId(R.styleable.CircularProgressIndicator_textFont, 0);
+                    if(fontResourceId != 0) {
+                        ResourcesCompat.getFont(getContext(), fontResourceId, fontCallback, null);
+                    }
+                } catch (Resources.NotFoundException ignored) {
+                }
+            }
 
             shouldDrawDot = a.getBoolean(R.styleable.CircularProgressIndicator_drawDot, true);
             dotColor = a.getColor(R.styleable.CircularProgressIndicator_dotColor, progressColor);
@@ -507,8 +533,7 @@ public class CircularProgressIndicator extends View {
     public void setTextColor(@ColorInt int color) {
         textPaint.setColor(color);
 
-        Rect textRect = new Rect();
-        textPaint.getTextBounds(progressText, 0, progressText.length(), textRect);
+        Rect textRect = calculateTextBounds();
 
         invalidate(textRect);
     }
@@ -533,6 +558,14 @@ public class CircularProgressIndicator extends View {
 
         Rect textBounds = calculateTextBounds();
         invalidate(textBounds);
+    }
+
+    public void setTextFont(Typeface font) {
+        textPaint.setTypeface(font);
+
+        Rect textRect = calculateTextBounds();
+
+        invalidate(textRect);
     }
 
     public void setShouldDrawDot(boolean shouldDrawDot) {
@@ -605,6 +638,10 @@ public class CircularProgressIndicator extends View {
 
     public float getTextSize() {
         return textPaint.getTextSize();
+    }
+
+    public Typeface getTextFont() {
+        return textPaint.getTypeface();
     }
 
 
