@@ -1,11 +1,15 @@
 package antonkozyriatskyi.circularprogressindicatorexample;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -17,6 +21,7 @@ import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
@@ -156,6 +161,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        Spinner spinner = findViewById(R.id.sb_text_font);
+
+        final Context context = this;
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        circularProgress.setTextFont(Typeface.DEFAULT);
+                        break;
+                    case 1:
+                        circularProgress.setTextFont(ResourcesCompat.getFont(context, R.font.architects_daughter));
+                        break;
+                    case 2:
+                        circularProgress.setTextFont(ResourcesCompat.getFont(context, R.font.open_sans_light));
+                        break;
+                    case 3:
+                        circularProgress.setTextFont(ResourcesCompat.getFont(context, R.font.vt323));
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        // Spinner Drop down elements
+        List<String> fonts = new ArrayList<String>();
+        fonts.add("Default");
+        fonts.add("Architects Daughter");
+        fonts.add("Open Sans Light");
+        fonts.add("VT323");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, fonts);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
     }
 
     @Override
