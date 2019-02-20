@@ -9,6 +9,7 @@
 
         <attr name="textColor" format="color" />
         <attr name="textSize" format="dimension" />
+        <attr name="textFont" format="string" />
 
         <attr name="formattingPattern" format="string|reference" />
 
