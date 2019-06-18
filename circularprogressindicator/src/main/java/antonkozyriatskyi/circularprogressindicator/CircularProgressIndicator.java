@@ -67,6 +67,7 @@ public class CircularProgressIndicator extends View {
     private static final int DEFAULT_ANIMATION_DURATION = 1_000;
 
     private static final String PROPERTY_ANGLE = "angle";
+    private static final int DEFAULT_DOT_ANGLE_POSITION = -1;
 
 
     private Paint progressPaint;
@@ -76,6 +77,7 @@ public class CircularProgressIndicator extends View {
 
     private int startAngle = DEFAULT_PROGRESS_START_ANGLE;
     private int sweepAngle = 0;
+    private int dotAnglePosition = DEFAULT_DOT_ANGLE_POSITION;
 
     private RectF circleBounds;
 
@@ -139,6 +141,7 @@ public class CircularProgressIndicator extends View {
         int textSize = sp2px(DEFAULT_TEXT_SIZE_SP);
 
         shouldDrawDot = true;
+
         int dotColor = progressColor;
         int dotWidth = progressStrokeWidth;
 
@@ -155,6 +158,7 @@ public class CircularProgressIndicator extends View {
             textSize = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_textSize, textSize);
 
             shouldDrawDot = a.getBoolean(R.styleable.CircularProgressIndicator_drawDot, true);
+            dotAnglePosition = a.getInt(R.styleable.CircularProgressIndicator_dotAnglePosition, DEFAULT_DOT_ANGLE_POSITION);
             dotColor = a.getColor(R.styleable.CircularProgressIndicator_dotColor, progressColor);
             dotWidth = a.getDimensionPixelSize(R.styleable.CircularProgressIndicator_dotWidth, progressStrokeWidth);
 
@@ -348,9 +352,18 @@ public class CircularProgressIndicator extends View {
     }
 
     private void drawDot(Canvas canvas) {
-        double angleRadians = Math.toRadians(startAngle + sweepAngle + 180);
+
+        double angleRadians;
+
+        if(startAngle != DEFAULT_DOT_ANGLE_POSITION){
+            angleRadians = Math.toRadians(dotAnglePosition + 180);
+        }else{
+            angleRadians = Math.toRadians(startAngle + sweepAngle + 180);
+        }
+
         float cos = (float) Math.cos(angleRadians);
         float sin = (float) Math.sin(angleRadians);
+
         float x = circleBounds.centerX() - radius * cos;
         float y = circleBounds.centerY() - radius * sin;
 
@@ -636,6 +649,11 @@ public class CircularProgressIndicator extends View {
 
     public void setStartAngle(@IntRange(from = 0, to = 360) int startAngle) {
         this.startAngle = startAngle;
+        invalidate();
+    }
+
+    public void setDotAnglePosition(@IntRange(from = 0, to = 360) int dotAnglePosition){
+        this.dotAnglePosition = dotAnglePosition;
         invalidate();
     }
 

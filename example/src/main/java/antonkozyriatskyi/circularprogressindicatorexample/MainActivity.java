@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button dotColor;
     private SeekBar dotWidth;
+    private SeekBar dotPositionSeekBar;
 
     private CircularProgressIndicator circularProgress;
 
@@ -52,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final SeekBar progressBackgroundStrokeWidth = findViewById(R.id.sb_progress_background_width);
         SeekBar textSize = findViewById(R.id.sb_text_size);
         dotWidth = findViewById(R.id.sb_dot_width);
+
+        dotPositionSeekBar = findViewById(R.id.sb_dot_position);
+        dotPositionSeekBar.setOnSeekBarChangeListener(this);
+        dotPositionSeekBar.setEnabled(false);//default to disabled since we cannot disable via xml
 
         progress.setOnSeekBarChangeListener(this);
         progressStrokeWidth.setOnSeekBarChangeListener(this);
@@ -80,6 +85,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 circularProgress.setFillBackgroundEnabled(isChecked);
+            }
+        });
+
+        final CheckBox dotPosition = findViewById(R.id.cb_dot_position);
+        dotPosition.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                dotPositionSeekBar.setEnabled(isChecked);
             }
         });
 
@@ -198,6 +211,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.sb_progress_background_width:
                 circularProgress.setProgressBackgroundStrokeWidthDp(progress);
+                break;
+            case R.id.sb_dot_position:
+                circularProgress.setDotAnglePosition(progress);
                 break;
         }
     }
