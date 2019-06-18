@@ -111,6 +111,14 @@
                 android:layout_marginLeft="8dp"
                 android:text="Fill background" />
 
+            <CheckBox
+                android:id="@+id/cb_dot_position"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Static dot position"/>
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,6 +133,19 @@
                 android:max="64"
                 android:min="0"
                 android:progress="8" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Progress dot position angle"/>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="360"
+                android:min="0"
+                android:layout_marginTop="8dp"
+                android:id="@+id/sb_dot_position"/>
 
             <TextView
                 android:layout_width="wrap_content"

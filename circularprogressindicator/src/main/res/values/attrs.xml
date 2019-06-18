@@ -17,6 +17,7 @@
         <attr name="dotWidth" format="dimension" />
 
         <attr name="startAngle" format="integer|reference" />
+        <attr name="dotAnglePosition" format="integer|reference"/>
 
         <attr name="direction" format="enum">
             <enum name="clockwise" value="0" />
