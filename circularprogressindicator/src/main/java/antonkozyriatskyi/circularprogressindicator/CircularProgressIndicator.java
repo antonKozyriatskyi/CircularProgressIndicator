@@ -377,6 +377,21 @@ public class CircularProgressIndicator extends View {
         setProgress(currentProgress, maxProgressValue);
     }
 
+    public void setProgress(double current, double max, boolean animate) {
+        if (animate) {
+            setProgress(current, max);
+        } else {
+            final double finalAngle;
+            if (direction == DIRECTION_COUNTERCLOCKWISE) {
+                finalAngle = -(current / max * 360);
+            } else {
+                finalAngle = current / max * 360;
+            }
+            sweepAngle = (int) finalAngle;
+            invalidateEverything();
+        }
+    }
+
     public void setProgress(double current, double max) {
         final double finalAngle;
 
