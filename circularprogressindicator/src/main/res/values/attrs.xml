@@ -31,6 +31,7 @@
         <attr name="enableProgressAnimation" format="boolean" />
 
         <attr name="fillBackground" format="boolean" />
+        <attr name="showText" format="boolean" />
 
         <attr name="gradientEndColor" format="color|reference"/>
         <attr name="gradientType" format="enum">
