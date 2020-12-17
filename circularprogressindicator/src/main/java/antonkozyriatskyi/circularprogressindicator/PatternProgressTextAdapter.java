@@ -1,6 +1,6 @@
 package antonkozyriatskyi.circularprogressindicator;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by Anton on 06.06.2018.
