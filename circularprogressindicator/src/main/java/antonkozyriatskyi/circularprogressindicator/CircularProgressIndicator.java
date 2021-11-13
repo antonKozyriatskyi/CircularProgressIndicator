@@ -94,6 +94,8 @@ public class CircularProgressIndicator extends View {
 
     private boolean isFillBackgroundEnabled;
 
+    private int animationDuration = DEFAULT_ANIMATION_DURATION;
+
     @Direction
     private int direction = DIRECTION_COUNTERCLOCKWISE;
 
@@ -417,7 +419,7 @@ public class CircularProgressIndicator extends View {
                 return (startValue + (endValue - startValue) * fraction);
             }
         }, oldCurrentProgress, progressValue);
-        progressAnimator.setDuration(DEFAULT_ANIMATION_DURATION);
+        progressAnimator.setDuration(animationDuration);
         progressAnimator.setValues(angleProperty);
         progressAnimator.setInterpolator(animationInterpolator);
         progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -695,6 +697,13 @@ public class CircularProgressIndicator extends View {
     public boolean isFillBackgroundEnabled() {
         return isFillBackgroundEnabled;
     }
+
+    public void setAnimationDuration(int duration) {
+        animationDuration = duration;
+    }
+
+
+    public int getAnimationDuration() { return animationDuration; }
 
     public void setInterpolator(@NonNull Interpolator interpolator) {
         animationInterpolator = interpolator;
