@@ -19,12 +19,15 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.os.Build;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.Dimension;
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.Size;
+
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -339,7 +342,7 @@ public class CircularProgressIndicator extends View {
         drawProgressBackground(canvas);
         drawProgress(canvas);
         if (shouldDrawDot) drawDot(canvas);
-        if(isShowTextEnabled) drawText(canvas);
+        if (isShowTextEnabled) drawText(canvas);
     }
 
     private void drawProgressBackground(Canvas canvas) {
@@ -707,7 +710,9 @@ public class CircularProgressIndicator extends View {
         animationDuration = duration;
     }
 
-    public int getAnimationDuration() { return animationDuration; }
+    public int getAnimationDuration() {
+        return animationDuration;
+    }
 
     public void setInterpolator(@NonNull Interpolator interpolator) {
         animationInterpolator = interpolator;
@@ -719,22 +724,25 @@ public class CircularProgressIndicator extends View {
     }
 
     public void setGradient(@GradientType int type, @ColorInt int endColor) {
+        int startColor = progressPaint.getColor();
+        setGradient(type, new int[]{startColor, endColor}, null);
+    }
+
+    public void setGradient(@GradientType int type, @Size(min = 2) @ColorInt int[] colors, @Nullable float[] positions) {
         Shader gradient = null;
 
         float cx = getWidth() / 2f;
         float cy = getHeight() / 2f;
 
-        int startColor = progressPaint.getColor();
-
         switch (type) {
             case LINEAR_GRADIENT:
-                gradient = new LinearGradient(0f, 0f, getWidth(), getHeight(), startColor, endColor, Shader.TileMode.CLAMP);
+                gradient = new LinearGradient(0f, 0f, getWidth(), getHeight(), colors, positions, Shader.TileMode.CLAMP);
                 break;
             case RADIAL_GRADIENT:
-                gradient = new RadialGradient(cx, cy, cx, startColor, endColor, Shader.TileMode.MIRROR);
+                gradient = new RadialGradient(cx, cy, cx, colors, positions, Shader.TileMode.MIRROR);
                 break;
             case SWEEP_GRADIENT:
-                gradient = new SweepGradient(cx, cy, new int[]{startColor, endColor}, null);
+                gradient = new SweepGradient(cx, cy, colors, positions );
                 break;
             case NO_GRADIENT:
                 return;
