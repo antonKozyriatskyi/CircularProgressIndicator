@@ -91,6 +91,9 @@ circularProgress.setProgress(5000, 10000);
 // you can get progress values using following getters
 circularProgress.getProgress() // returns 5000
 circularProgress.getMaxProgress() // returns 10000
+
+// you can also set a visual gap between the progress and background strokes
+circularProgress.setProgressGap(100);
 ```
 
 #### Attributes
@@ -105,6 +108,7 @@ circularProgress.getMaxProgress() // returns 10000
 |  Dot width                                                                                                                                          | `app:dotWidth`                       | setters: `setDotWidthDp(widthInDp)` or `setDotWidthPx(widthInPx)`<br/>getter: `getDotWidth()` (returns width in pixels)                                                                  | same as progress stroke width |
 |  Progress text size                                                                                                                                 | `app:textSize`                       | setters: `setTextSizeSp(sizeInSp)` or `setTextSizePx(sizeInPx)`<br/>getter: `getTextSize()` (returns size in pixels)                                                                     | `24sp`                        |
 |  Progress text color                                                                                                                                | `app:textColor`                      | setter: `setTextColor(textColor)`<br/>getter: `getTextColor()`                                                                                                                           | same as progress color        |
+|  Whether to show text                                                                                                                               | `app:showText`                       | setter: `setShowTextEnabled(enabled)`<br/>getter: `isShowTextEnabled()`                                                                                                                           | same as progress color        |
 |  Formatting pattern to be used in `PatternProgressTextAdapter`. Checkout [Formatting progress text](#formatting-progress-text) section.             | `app:formattingPattern`              | setter: `setProgressTextAdapter(progressTextAdapter)`<br/>getter: `getProgressTextAdapter()`                                                                                             | not specified                 |
 |  Direction of the progress arc (`clockwise` or `counterclockwise`)                                                                                  | `app:direction`                      | setter: `setDirection(direction)`<br/>getter: `getDirection()`                                                                                                                           | `counterclockwise`            |
 |  Start angle. Checkout [Start angle](#setting-start-angle) section.                                                                                 | `app:startAngle`                     | setter: `setStartAngle(startAngle)`<br/>getter: `getStartAngle()`                                                                                                                        | `270`                         |
@@ -243,6 +247,11 @@ int gradientType = CircularProgressIndicator.LINEAR_GRADIENT;
 circularProgress.setGradient(gradientType, endColor);
 
 circularProgress.getGradientType(); //returns LINEAR_GRADIENT
+```
+
+Or, for advanced gradients with multiple colors and optional color positions, in code:
+```java
+circularProgress.setGradient(type, new int[]{Color.BLUE, Color.MAGENTA, Color.RED}, new float[]{0f, .3f, .7f});
 ```
 
 ---
