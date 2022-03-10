@@ -697,7 +697,7 @@ public class CircularProgressIndicator extends View {
     }
 
     public void setShowTextEnabled(boolean enabled) {
-        if (isShowTextEnabled = enabled) return;
+        if (isShowTextEnabled == enabled) return;
         isShowTextEnabled = enabled;
         invalidateEverything();
     }
