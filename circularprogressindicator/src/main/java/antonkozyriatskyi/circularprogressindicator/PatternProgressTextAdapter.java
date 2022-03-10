@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 public final class PatternProgressTextAdapter implements CircularProgressIndicator.ProgressTextAdapter {
 
-    private String pattern;
+    private final String pattern;
 
     public PatternProgressTextAdapter(String pattern) {
         this.pattern = pattern;

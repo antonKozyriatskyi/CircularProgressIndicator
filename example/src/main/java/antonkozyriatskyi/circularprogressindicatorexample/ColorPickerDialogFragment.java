@@ -4,14 +4,16 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
  * Created by Anton on 13.03.2018.
@@ -55,25 +57,22 @@ public class ColorPickerDialogFragment extends BottomSheetDialogFragment {
 
                 colorResult.setBackgroundColor(Color.rgb(redProgress, greenProgress, blueProgress));
 
-                switch (seekBar.getId()) {
-                    case R.id.sb_red:
-                        seekBar.getProgressDrawable().setColorFilter(Color.rgb(redProgress, 0, 0), mode);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            seekBar.getThumb().setColorFilter(Color.rgb(redProgress, 0, 0), mode);
-                        }
-                        break;
-                    case R.id.sb_green:
-                        seekBar.getProgressDrawable().setColorFilter(Color.rgb(0, greenProgress, 0), mode);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            seekBar.getThumb().setColorFilter(Color.rgb(0, greenProgress, 0), mode);
-                        }
-                        break;
-                    case R.id.sb_blue:
-                        seekBar.getProgressDrawable().setColorFilter(Color.rgb(0, 0, blueProgress), mode);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            seekBar.getThumb().setColorFilter(Color.rgb(0, 0, blueProgress), mode);
-                        }
-                        break;
+                int id = seekBar.getId();
+                if (id == R.id.sb_red) {
+                    seekBar.getProgressDrawable().setColorFilter(Color.rgb(redProgress, 0, 0), mode);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        seekBar.getThumb().setColorFilter(Color.rgb(redProgress, 0, 0), mode);
+                    }
+                } else if (id == R.id.sb_green) {
+                    seekBar.getProgressDrawable().setColorFilter(Color.rgb(0, greenProgress, 0), mode);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        seekBar.getThumb().setColorFilter(Color.rgb(0, greenProgress, 0), mode);
+                    }
+                } else if (id == R.id.sb_blue) {
+                    seekBar.getProgressDrawable().setColorFilter(Color.rgb(0, 0, blueProgress), mode);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        seekBar.getThumb().setColorFilter(Color.rgb(0, 0, blueProgress), mode);
+                    }
                 }
             }
         };
@@ -82,13 +81,10 @@ public class ColorPickerDialogFragment extends BottomSheetDialogFragment {
         green.setOnSeekBarChangeListener(seekBarChangeListener);
         blue.setOnSeekBarChangeListener(seekBarChangeListener);
 
-        selectColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onColorSelectedListener.onColorChosen(ColorPickerDialogFragment.this,
-                        red.getProgress(), green.getProgress(), blue.getProgress());
-                dismiss();
-            }
+        selectColor.setOnClickListener(v -> {
+            onColorSelectedListener.onColorChosen(ColorPickerDialogFragment.this,
+                    red.getProgress(), green.getProgress(), blue.getProgress());
+            dismiss();
         });
 
         return rootView;

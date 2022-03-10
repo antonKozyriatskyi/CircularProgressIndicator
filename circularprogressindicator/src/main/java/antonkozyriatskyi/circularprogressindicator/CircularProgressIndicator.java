@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.PropertyValuesHolder;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -39,7 +40,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by Anton on 03.03.2018.
  */
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class CircularProgressIndicator extends View {
 
     public static final int DIRECTION_CLOCKWISE = 0;
@@ -103,6 +104,7 @@ public class CircularProgressIndicator extends View {
 
     private ValueAnimator progressAnimator;
 
+    @SuppressWarnings("NotNullFieldNotInitialized") // initialized in init method
     @NonNull
     private ProgressTextAdapter progressTextAdapter;
 
@@ -111,6 +113,9 @@ public class CircularProgressIndicator extends View {
 
     @NonNull
     private Interpolator animationInterpolator = new AccelerateDecelerateInterpolator();
+
+    @NonNull
+    private final Rect textBoundsRect = new Rect();
 
     public CircularProgressIndicator(Context context) {
         super(context);
@@ -193,12 +198,7 @@ public class CircularProgressIndicator extends View {
                     throw new IllegalArgumentException("did you forget to specify gradientColorEnd?");
                 }
 
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setGradient(gradientType, gradientColorEnd);
-                    }
-                });
+                post(() -> setGradient(gradientType, gradientColorEnd));
             }
 
             a.recycle();
@@ -234,6 +234,7 @@ public class CircularProgressIndicator extends View {
         circleBounds = new RectF();
     }
 
+    @SuppressLint("SwitchIntDef")
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -249,9 +250,7 @@ public class CircularProgressIndicator extends View {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        Rect textBoundsRect = new Rect();
         textPaint.getTextBounds(progressText, 0, progressText.length(), textBoundsRect);
-
 
         float dotWidth = dotPaint.getStrokeWidth();
         float progressWidth = progressPaint.getStrokeWidth();
@@ -416,21 +415,14 @@ public class CircularProgressIndicator extends View {
     private void startProgressAnimation(double oldCurrentProgress, final double finalAngle) {
         final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, sweepAngle, (int) finalAngle);
 
-        progressAnimator = ValueAnimator.ofObject(new TypeEvaluator<Double>() {
-            @Override
-            public Double evaluate(float fraction, Double startValue, Double endValue) {
-                return (startValue + (endValue - startValue) * fraction);
-            }
-        }, oldCurrentProgress, progressValue);
+        progressAnimator = ValueAnimator.ofObject((TypeEvaluator<Double>)
+                (fraction, startValue, endValue) -> (startValue + (endValue - startValue) * fraction), oldCurrentProgress, progressValue);
         progressAnimator.setDuration(animationDuration);
         progressAnimator.setValues(angleProperty);
         progressAnimator.setInterpolator(animationInterpolator);
-        progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                sweepAngle = (int) animation.getAnimatedValue(PROPERTY_ANGLE);
-                invalidate();
-            }
+        progressAnimator.addUpdateListener(animation -> {
+            sweepAngle = (int) animation.getAnimatedValue(PROPERTY_ANGLE);
+            invalidate();
         });
         progressAnimator.addListener(new DefaultAnimatorListener() {
             @Override
@@ -744,6 +736,8 @@ public class CircularProgressIndicator extends View {
             case SWEEP_GRADIENT:
                 gradient = new SweepGradient(cx, cy, new int[]{startColor, endColor}, null);
                 break;
+            case NO_GRADIENT:
+                return;
         }
 
         if (gradient != null) {
