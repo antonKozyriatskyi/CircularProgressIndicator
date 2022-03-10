@@ -216,6 +216,7 @@ public class CircularProgressIndicator extends View {
 
         Paint.Style progressBackgroundStyle = isFillBackgroundEnabled ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE;
         progressBackgroundPaint = new Paint();
+        progressBackgroundPaint.setStrokeCap(progressStrokeCap);
         progressBackgroundPaint.setStyle(progressBackgroundStyle);
         progressBackgroundPaint.setStrokeWidth(progressBackgroundStrokeWidth);
         progressBackgroundPaint.setColor(progressBackgroundColor);
@@ -671,6 +672,7 @@ public class CircularProgressIndicator extends View {
         Paint.Cap paintCap = (cap == CAP_ROUND) ? Paint.Cap.ROUND : Paint.Cap.BUTT;
         if (progressPaint.getStrokeCap() != paintCap) {
             progressPaint.setStrokeCap(paintCap);
+            progressBackgroundPaint.setStrokeCap(paintCap);
             invalidate();
         }
     }
