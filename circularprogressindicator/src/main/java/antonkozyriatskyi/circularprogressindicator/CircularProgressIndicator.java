@@ -94,6 +94,8 @@ public class CircularProgressIndicator extends View {
 
     private boolean isFillBackgroundEnabled;
 
+    private boolean isShowTextEnabled = true;
+
     @Direction
     private int direction = DIRECTION_COUNTERCLOCKWISE;
 
@@ -165,6 +167,7 @@ public class CircularProgressIndicator extends View {
 
             isAnimationEnabled = a.getBoolean(R.styleable.CircularProgressIndicator_enableProgressAnimation, true);
             isFillBackgroundEnabled = a.getBoolean(R.styleable.CircularProgressIndicator_fillBackground, false);
+            isShowTextEnabled = a.getBoolean(R.styleable.CircularProgressIndicator_showText, true);
 
             direction = a.getInt(R.styleable.CircularProgressIndicator_direction, DIRECTION_COUNTERCLOCKWISE);
 
@@ -335,7 +338,7 @@ public class CircularProgressIndicator extends View {
         drawProgressBackground(canvas);
         drawProgress(canvas);
         if (shouldDrawDot) drawDot(canvas);
-        drawText(canvas);
+        if(isShowTextEnabled) drawText(canvas);
     }
 
     private void drawProgressBackground(Canvas canvas) {
@@ -694,6 +697,16 @@ public class CircularProgressIndicator extends View {
 
     public boolean isFillBackgroundEnabled() {
         return isFillBackgroundEnabled;
+    }
+
+    public void setShowTextEnabled(boolean enabled) {
+        if (isShowTextEnabled = enabled) return;
+        isShowTextEnabled = enabled;
+        invalidateEverything();
+    }
+
+    public boolean isShowTextEnabled() {
+        return isShowTextEnabled;
     }
 
     public void setInterpolator(@NonNull Interpolator interpolator) {
