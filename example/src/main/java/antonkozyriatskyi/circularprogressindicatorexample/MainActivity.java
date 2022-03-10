@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button dotColor;
     private SeekBar dotWidth;
+    private SeekBar gapSize;
 
     private CircularProgressIndicator circularProgress;
 
@@ -52,12 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final SeekBar progressBackgroundStrokeWidth = findViewById(R.id.sb_progress_background_width);
         SeekBar textSize = findViewById(R.id.sb_text_size);
         dotWidth = findViewById(R.id.sb_dot_width);
+        gapSize = findViewById(R.id.sb_gap_size);
 
         progress.setOnSeekBarChangeListener(this);
         progressStrokeWidth.setOnSeekBarChangeListener(this);
         progressBackgroundStrokeWidth.setOnSeekBarChangeListener(this);
         textSize.setOnSeekBarChangeListener(this);
         dotWidth.setOnSeekBarChangeListener(this);
+        gapSize.setOnSeekBarChangeListener(this);
 
         CheckBox drawDot = findViewById(R.id.cb_draw_dot);
         drawDot.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -74,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CheckBox showText = findViewById(R.id.cb_show_text);
         showText.setChecked(circularProgress.isShowTextEnabled());
         showText.setOnCheckedChangeListener((buttonView, isChecked) -> circularProgress.setShowTextEnabled(isChecked));
-
-
 
         RadioGroup progressCap = findViewById(R.id.rg_cap);
         progressCap.setOnCheckedChangeListener((group, checkedId) -> {
@@ -167,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             circularProgress.setTextSizeSp(progress);
         } else if (id == R.id.sb_progress_background_width) {
             circularProgress.setProgressBackgroundStrokeWidthDp(progress);
+        } else if (id == R.id.sb_gap_size) {
+            circularProgress.setProgressGap(progress * 10);
         }
     }
 

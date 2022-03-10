@@ -19,6 +19,13 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.os.Build;
+import android.text.TextPaint;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Dimension;
@@ -27,14 +34,6 @@ import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Size;
-
-import android.text.TextPaint;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -79,7 +78,7 @@ public class CircularProgressIndicator extends View {
     private Paint textPaint;
 
     private int startAngle = DEFAULT_PROGRESS_START_ANGLE;
-    private int sweepAngle = 0;
+    private float sweepAngle = 0;
 
     private RectF circleBounds;
 
@@ -93,6 +92,7 @@ public class CircularProgressIndicator extends View {
 
     private double maxProgressValue = 100.0;
     private double progressValue = 0.0;
+    private double progressGap = 0.0;
 
     private boolean isAnimationEnabled;
 
@@ -346,8 +346,22 @@ public class CircularProgressIndicator extends View {
     }
 
     private void drawProgressBackground(Canvas canvas) {
-        canvas.drawArc(circleBounds, ANGLE_START_PROGRESS_BACKGROUND, ANGLE_END_PROGRESS_BACKGROUND,
-                false, progressBackgroundPaint);
+        if (progressGap == 0) {
+            canvas.drawArc(circleBounds, ANGLE_START_PROGRESS_BACKGROUND, ANGLE_END_PROGRESS_BACKGROUND,
+                    false, progressBackgroundPaint);
+        } else {
+            float gapAngle = (float) (progressGap / maxProgressValue * 360);
+
+            float startAngle = this.sweepAngle - 90 + gapAngle;
+            float sweepAngle = 360 - this.sweepAngle - 2 * gapAngle;
+
+            if (sweepAngle < 0) {
+                return;
+            }
+
+            canvas.drawArc(circleBounds, startAngle, sweepAngle,
+                    false, progressBackgroundPaint);
+        }
     }
 
     private void drawProgress(Canvas canvas) {
@@ -410,13 +424,13 @@ public class CircularProgressIndicator extends View {
         if (isAnimationEnabled) {
             startProgressAnimation(oldCurrentProgress, finalAngle);
         } else {
-            sweepAngle = (int) finalAngle;
+            sweepAngle = (float) finalAngle;
             invalidate();
         }
     }
 
     private void startProgressAnimation(double oldCurrentProgress, final double finalAngle) {
-        final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofInt(PROPERTY_ANGLE, sweepAngle, (int) finalAngle);
+        final PropertyValuesHolder angleProperty = PropertyValuesHolder.ofFloat(PROPERTY_ANGLE, sweepAngle, (float) finalAngle);
 
         progressAnimator = ValueAnimator.ofObject((TypeEvaluator<Double>)
                 (fraction, startValue, endValue) -> (startValue + (endValue - startValue) * fraction), oldCurrentProgress, progressValue);
@@ -424,13 +438,13 @@ public class CircularProgressIndicator extends View {
         progressAnimator.setValues(angleProperty);
         progressAnimator.setInterpolator(animationInterpolator);
         progressAnimator.addUpdateListener(animation -> {
-            sweepAngle = (int) animation.getAnimatedValue(PROPERTY_ANGLE);
+            sweepAngle = (float) animation.getAnimatedValue(PROPERTY_ANGLE);
             invalidate();
         });
         progressAnimator.addListener(new DefaultAnimatorListener() {
             @Override
             public void onAnimationCancel(Animator animation) {
-                sweepAngle = (int) finalAngle;
+                sweepAngle = (float) finalAngle;
                 invalidate();
                 progressAnimator = null;
             }
@@ -621,7 +635,6 @@ public class CircularProgressIndicator extends View {
         return dotPaint.getStrokeWidth();
     }
 
-
     public double getProgress() {
         return progressValue;
     }
@@ -742,7 +755,7 @@ public class CircularProgressIndicator extends View {
                 gradient = new RadialGradient(cx, cy, cx, colors, positions, Shader.TileMode.MIRROR);
                 break;
             case SWEEP_GRADIENT:
-                gradient = new SweepGradient(cx, cy, colors, positions );
+                gradient = new SweepGradient(cx, cy, colors, positions);
                 break;
             case NO_GRADIENT:
                 return;
@@ -774,6 +787,15 @@ public class CircularProgressIndicator extends View {
         }
 
         return type;
+    }
+
+    public double getProgressGap() {
+        return progressGap;
+    }
+
+    public void setProgressGap(double progressGap) {
+        this.progressGap = progressGap;
+        invalidate();
     }
 
     @Retention(RetentionPolicy.SOURCE)
