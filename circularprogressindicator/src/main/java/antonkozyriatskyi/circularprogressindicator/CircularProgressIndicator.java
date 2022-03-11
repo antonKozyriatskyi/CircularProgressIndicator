@@ -353,7 +353,7 @@ public class CircularProgressIndicator extends View {
         } else {
             float gapAngle = (float) (progressGap / maxProgressValue * 360);
 
-            float startAngle = this.sweepAngle - 90 + gapAngle;
+            float startAngle = this.sweepAngle + this.startAngle + gapAngle;
             float sweepAngle = 360 - this.sweepAngle - 2 * gapAngle;
 
             if (sweepAngle < 0) {
