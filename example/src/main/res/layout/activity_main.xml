@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="antonkozyriatskyi.circularprogressindicatorexample.MainActivity">
+    tools:context="antonkozyriatskyi.circularprogressindicatorexample.MainActivity"
+    tools:ignore="HardcodedText">
 
     <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
         android:id="@+id/circular_progress"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:direction="clockwise" />
 
     <ScrollView
@@ -23,8 +24,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="vertical">
 
             <TextView
@@ -56,7 +57,6 @@
                 android:max="64"
                 android:min="8"
                 android:progress="24" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,6 +93,7 @@
                 android:id="@+id/cb_draw_dot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:checked="true"
                 android:text="Enable dot" />
@@ -101,6 +102,7 @@
                 android:id="@+id/cb_custom_text_adapter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:text="Use custom text adapter (HH:MM:SS)" />
 
@@ -108,8 +110,17 @@
                 android:id="@+id/cb_fill_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:text="Fill background" />
+
+            <CheckBox
+                android:id="@+id/cb_show_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="Show Text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -129,8 +140,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginTop="16dp"
+                android:text="Progress gap" />
+
+            <SeekBar
+                android:id="@+id/sb_gap_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:max="100"
+                android:min="0"
+                android:progress="10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="Progress cap" />
 
             <RadioGroup
@@ -153,7 +179,7 @@
 
             </RadioGroup>
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/sw_enable_animation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,7 +189,7 @@
             <Spinner
                 android:id="@+id/sp_gradient_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/btn_progress_color"

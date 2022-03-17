@@ -1,6 +1,6 @@
 package antonkozyriatskyi.circularprogressindicator;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by Anton on 06.06.2018.
@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 
 public final class PatternProgressTextAdapter implements CircularProgressIndicator.ProgressTextAdapter {
 
-    private String pattern;
+    private final String pattern;
 
     public PatternProgressTextAdapter(String pattern) {
         this.pattern = pattern;

@@ -2,18 +2,18 @@ package antonkozyriatskyi.circularprogressindicatorexample;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.Switch;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button dotColor;
     private SeekBar dotWidth;
+    private SeekBar gapSize;
 
     private CircularProgressIndicator circularProgress;
 
@@ -52,66 +53,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final SeekBar progressBackgroundStrokeWidth = findViewById(R.id.sb_progress_background_width);
         SeekBar textSize = findViewById(R.id.sb_text_size);
         dotWidth = findViewById(R.id.sb_dot_width);
+        gapSize = findViewById(R.id.sb_gap_size);
 
         progress.setOnSeekBarChangeListener(this);
         progressStrokeWidth.setOnSeekBarChangeListener(this);
         progressBackgroundStrokeWidth.setOnSeekBarChangeListener(this);
         textSize.setOnSeekBarChangeListener(this);
         dotWidth.setOnSeekBarChangeListener(this);
+        gapSize.setOnSeekBarChangeListener(this);
 
         CheckBox drawDot = findViewById(R.id.cb_draw_dot);
-        drawDot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                circularProgress.setShouldDrawDot(isChecked);
-                dotWidth.setEnabled(isChecked);
-                dotColor.setEnabled(isChecked);
-            }
+        drawDot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            circularProgress.setShouldDrawDot(isChecked);
+            dotWidth.setEnabled(isChecked);
+            dotColor.setEnabled(isChecked);
         });
         CheckBox useCustomTextAdapter = findViewById(R.id.cb_custom_text_adapter);
-        useCustomTextAdapter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                circularProgress.setProgressTextAdapter(isChecked ? TIME_TEXT_ADAPTER : null);
-            }
-        });
+        useCustomTextAdapter.setOnCheckedChangeListener((buttonView, isChecked) -> circularProgress.setProgressTextAdapter(isChecked ? TIME_TEXT_ADAPTER : null));
         CheckBox fillBackground = findViewById(R.id.cb_fill_background);
-        fillBackground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                circularProgress.setFillBackgroundEnabled(isChecked);
-            }
-        });
+        fillBackground.setChecked(circularProgress.isFillBackgroundEnabled());
+        fillBackground.setOnCheckedChangeListener((buttonView, isChecked) -> circularProgress.setFillBackgroundEnabled(isChecked));
+
+        CheckBox showText = findViewById(R.id.cb_show_text);
+        showText.setChecked(circularProgress.isShowTextEnabled());
+        showText.setOnCheckedChangeListener((buttonView, isChecked) -> circularProgress.setShowTextEnabled(isChecked));
 
         RadioGroup progressCap = findViewById(R.id.rg_cap);
-        progressCap.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rb_cap_butt:
-                        circularProgress.setProgressStrokeCap(CircularProgressIndicator.CAP_BUTT);
-                        break;
-                    case R.id.rb_cap_round:
-                        circularProgress.setProgressStrokeCap(CircularProgressIndicator.CAP_ROUND);
-                        break;
-                }
+        progressCap.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rb_cap_butt) {
+                circularProgress.setProgressStrokeCap(CircularProgressIndicator.CAP_BUTT);
+            } else if (checkedId == R.id.rb_cap_round) {
+                circularProgress.setProgressStrokeCap(CircularProgressIndicator.CAP_ROUND);
             }
         });
 
-        circularProgress.setOnProgressChangeListener(new CircularProgressIndicator.OnProgressChangeListener() {
-            @Override
-            public void onProgressChanged(double progress, double maxProgress) {
-                Log.d("PROGRESS", String.format("Current: %1$.0f, max: %2$.0f", progress, maxProgress));
-            }
-        });
+        circularProgress.setOnProgressChangeListener((progress1, maxProgress) -> Log.d("PROGRESS", String.format("Current: %1$.0f, max: %2$.0f", progress1, maxProgress)));
 
-        Switch animationSwitch = findViewById(R.id.sw_enable_animation);
-        animationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                circularProgress.setAnimationEnabled(isChecked);
-            }
-        });
+        SwitchCompat animationSwitch = findViewById(R.id.sw_enable_animation);
+        animationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> circularProgress.setAnimationEnabled(isChecked));
 
         Spinner gradientType = findViewById(R.id.sp_gradient_type);
 
@@ -135,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gradient.put("type", "Sweep");
         gradient.put("value", "3");
         gradients.add(gradient);
-
 
         gradientType.setAdapter(
                 new SimpleAdapter(
@@ -163,19 +141,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ColorPickerDialogFragment dialog = new ColorPickerDialogFragment();
         dialog.setOnColorSelectedListener(this);
         String tag = null;
-        switch (v.getId()) {
-            case R.id.btn_progress_color:
-                tag = "progressColor";
-                break;
-            case R.id.btn_background_color:
-                tag = "progressBackgroundColor";
-                break;
-            case R.id.btn_text_color:
-                tag = "textColor";
-                break;
-            case R.id.btn_dot_color:
-                tag = "dotColor";
-                break;
+        int id = v.getId();
+        if (id == R.id.btn_progress_color) {
+            tag = "progressColor";
+        } else if (id == R.id.btn_background_color) {
+            tag = "progressBackgroundColor";
+        } else if (id == R.id.btn_text_color) {
+            tag = "textColor";
+        } else if (id == R.id.btn_dot_color) {
+            tag = "dotColor";
         }
 
         dialog.show(getSupportFragmentManager(), tag);
@@ -183,22 +157,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        switch (seekBar.getId()) {
-            case R.id.sb_progress:
-                circularProgress.setCurrentProgress(progress);
-                break;
-            case R.id.sb_progress_width:
-                circularProgress.setProgressStrokeWidthDp(progress);
-                break;
-            case R.id.sb_dot_width:
-                circularProgress.setDotWidthDp(progress);
-                break;
-            case R.id.sb_text_size:
-                circularProgress.setTextSizeSp(progress);
-                break;
-            case R.id.sb_progress_background_width:
-                circularProgress.setProgressBackgroundStrokeWidthDp(progress);
-                break;
+        int id = seekBar.getId();
+        if (id == R.id.sb_progress) {
+            circularProgress.setCurrentProgress(progress);
+        } else if (id == R.id.sb_progress_width) {
+            circularProgress.setProgressStrokeWidthDp(progress);
+        } else if (id == R.id.sb_dot_width) {
+            circularProgress.setDotWidthDp(progress);
+        } else if (id == R.id.sb_text_size) {
+            circularProgress.setTextSizeSp(progress);
+        } else if (id == R.id.sb_progress_background_width) {
+            circularProgress.setProgressBackgroundStrokeWidthDp(progress);
+        } else if (id == R.id.sb_gap_size) {
+            circularProgress.setProgressGap(progress * 10);
         }
     }
 
@@ -233,27 +204,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private static final CircularProgressIndicator.ProgressTextAdapter TIME_TEXT_ADAPTER = new CircularProgressIndicator.ProgressTextAdapter() {
-        @Override
-        public String formatText(double time) {
-            int hours = (int) (time / 3600);
-            time %= 3600;
-            int minutes = (int) (time / 60);
-            int seconds = (int) (time % 60);
-            StringBuilder sb = new StringBuilder();
-            if (hours < 10) {
-                sb.append(0);
-            }
-            sb.append(hours).append(":");
-            if (minutes < 10) {
-                sb.append(0);
-            }
-            sb.append(minutes).append(":");
-            if (seconds < 10) {
-                sb.append(0);
-            }
-            sb.append(seconds);
-            return sb.toString();
+    private static final CircularProgressIndicator.ProgressTextAdapter TIME_TEXT_ADAPTER = time -> {
+        int hours = (int) (time / 3600);
+        time %= 3600;
+        int minutes = (int) (time / 60);
+        int seconds = (int) (time % 60);
+        StringBuilder sb = new StringBuilder();
+        if (hours < 10) {
+            sb.append(0);
         }
+        sb.append(hours).append(":");
+        if (minutes < 10) {
+            sb.append(0);
+        }
+        sb.append(minutes).append(":");
+        if (seconds < 10) {
+            sb.append(0);
+        }
+        sb.append(seconds);
+        return sb.toString();
     };
 }
